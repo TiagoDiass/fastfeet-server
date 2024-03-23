@@ -25,3 +25,10 @@ func TestNewRecipient(t *testing.T) {
 	require.Equal(t, recipient.Address.Street, "Main St")
 	require.Equal(t, recipient.Address.HouseNumber, "123")
 }
+
+func TestNewRecipientWithID(t *testing.T) {
+	address := NewAddress("Main St", "123", "Downtown", "CA", "12345")
+	recipient := NewRecipientWithID("fake-id", "John Doe", address)
+
+	require.Equal(t, recipient.ID, "fake-id")
+}

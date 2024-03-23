@@ -16,7 +16,13 @@ type Recipient struct {
 	Address
 }
 
-func NewAddress(street, houseNumber, district, state, zipcode string) Address {
+func NewAddress(
+	street,
+	houseNumber,
+	district,
+	state,
+	zipcode string,
+) Address {
 	return Address{
 		Street:      street,
 		HouseNumber: houseNumber,
@@ -32,4 +38,15 @@ func NewRecipient(name string, address Address) Recipient {
 		Name:    name,
 		Address: address,
 	}
+}
+
+func NewRecipientWithID(
+	id,
+	name string,
+	address Address,
+) Recipient {
+	recipient := NewRecipient(name, address)
+	recipient.ID = id
+
+	return recipient
 }
