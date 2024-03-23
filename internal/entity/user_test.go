@@ -23,7 +23,21 @@ func TestNewUser(t *testing.T) {
 	require.Equal(t, user.Email, "email@example.com")
 	require.Equal(t, user.Phone, "fake-phone")
 	require.Equal(t, user.Role, Admin)
-	require.Equal(t, user.Role.String(), "admin") // Verify Role string representation
+	require.Equal(t, user.Role.String(), "admin")
+}
+
+func TestNewUserWithID(t *testing.T) {
+	user := NewUserWithID(
+		"fake-id",
+		"fake-document",
+		"fake-password",
+		"fake-name",
+		"email@example.com",
+		"fake-phone",
+		Admin,
+	)
+
+	require.Equal(t, user.ID, "fake-id")
 }
 
 func TestRoleEnum(t *testing.T) {

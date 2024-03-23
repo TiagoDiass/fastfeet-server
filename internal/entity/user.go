@@ -31,12 +31,23 @@ type User struct {
 }
 
 func NewUser(document, password, name, email, phone string, role Role) User {
-	return User{
+	user := User{
 		ID:       uuid.NewString(),
 		Document: document,
 		Password: password,
 		Name:     name,
 		Email:    email,
 		Phone:    phone,
+		Role:     role,
 	}
+
+	return user
+}
+
+func NewUserWithID(id, document, password, name, email, phone string, role Role) User {
+	user := NewUser(document, password, name, email, phone, role)
+
+	user.ID = id
+
+	return user
 }
