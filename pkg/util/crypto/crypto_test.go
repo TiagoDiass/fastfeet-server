@@ -11,7 +11,7 @@ func TestShouldCreateHashCorrectly(t *testing.T) {
 	hashText, err := CreateHash(plainText)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, &hashText)
+	require.NotEmpty(t, *hashText)
 }
 
 func TestShouldCompareHashCorrectly(t *testing.T) {
@@ -20,8 +20,7 @@ func TestShouldCompareHashCorrectly(t *testing.T) {
 
 	require.NoError(t, err)
 
-	passwordsMatch := CompareHash(plainText, &hashText)
-
+	passwordsMatch := CompareHash(plainText, *hashText)
 	require.Equal(t, passwordsMatch, true)
 }
 
@@ -30,7 +29,6 @@ func TestShouldCompareHashWithStringsNotMatching(t *testing.T) {
 	hashText, _ := CreateHash(plainText)
 	incorrectPlainText := "wrongpassword"
 
-	passwordsMatch := CompareHash(incorrectPlainText, &hashText)
-
+	passwordsMatch := CompareHash(incorrectPlainText, *hashText)
 	require.Equal(t, passwordsMatch, false)
 }
