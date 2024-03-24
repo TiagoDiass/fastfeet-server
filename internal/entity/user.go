@@ -1,6 +1,10 @@
 package entity
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Role uint8
 
@@ -21,33 +25,36 @@ func (r Role) String() string {
 }
 
 type User struct {
-	ID       string
-	Document string
-	Password string
-	Name     string
-	Email    string
-	Phone    string
-	Role     Role
+	ID        string
+	Document  string
+	Password  string
+	Name      string
+	Email     string
+	Phone     string
+	Role      Role
+	CreatedAt time.Time
 }
 
 func NewUser(document, password, name, email, phone string, role Role) User {
 	user := User{
-		ID:       uuid.NewString(),
-		Document: document,
-		Password: password,
-		Name:     name,
-		Email:    email,
-		Phone:    phone,
-		Role:     role,
+		ID:        uuid.NewString(),
+		Document:  document,
+		Password:  password,
+		Name:      name,
+		Email:     email,
+		Phone:     phone,
+		Role:      role,
+		CreatedAt: time.Now(),
 	}
 
 	return user
 }
 
-func NewUserWithID(id, document, password, name, email, phone string, role Role) User {
+func NewExistingUser(id, document, password, name, email, phone string, role Role, createdAt time.Time) User {
 	user := NewUser(document, password, name, email, phone, role)
 
 	user.ID = id
+	user.CreatedAt = createdAt
 
 	return user
 }

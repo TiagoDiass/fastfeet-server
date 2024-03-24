@@ -2,6 +2,7 @@ package entity
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -24,10 +25,13 @@ func TestNewUser(t *testing.T) {
 	require.Equal(t, user.Phone, "fake-phone")
 	require.Equal(t, user.Role, Admin)
 	require.Equal(t, user.Role.String(), "admin")
+	require.NotEmpty(t, user.CreatedAt)
 }
 
-func TestNewUserWithID(t *testing.T) {
-	user := NewUserWithID(
+func TestNewExistingUser(t *testing.T) {
+	now := time.Now()
+
+	user := NewExistingUser(
 		"fake-id",
 		"fake-document",
 		"fake-password",
@@ -35,9 +39,11 @@ func TestNewUserWithID(t *testing.T) {
 		"email@example.com",
 		"fake-phone",
 		Admin,
+		now,
 	)
 
 	require.Equal(t, user.ID, "fake-id")
+	require.Equal(t, user.CreatedAt, now)
 }
 
 func TestRoleEnum(t *testing.T) {
