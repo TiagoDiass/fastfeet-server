@@ -2,54 +2,44 @@ package entity
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestNewUser(t *testing.T) {
-	user := NewUser(
+	user, err := NewUser(
 		"fake-document",
 		"fake-password",
 		"fake-name",
 		"email@example.com",
 		"fake-phone",
-		Admin,
+		"admin",
 	)
 
+	require.Nil(t, err)
 	require.NotEmpty(t, user.ID)
 	require.Equal(t, user.Document, "fake-document")
-	require.Equal(t, user.Password, "fake-password")
+	require.NotEmpty(t, user.Password)
 	require.Equal(t, user.Name, "fake-name")
 	require.Equal(t, user.Email, "email@example.com")
 	require.Equal(t, user.Phone, "fake-phone")
-	require.Equal(t, user.Role, Admin)
-	require.Equal(t, user.Role.String(), "admin")
+	require.Equal(t, user.Role, "admin")
 	require.NotEmpty(t, user.CreatedAt)
 }
 
-func TestNewExistingUser(t *testing.T) {
-	now := time.Now()
-
-	user := NewExistingUser(
-		"fake-id",
+func TestUser_ValidatePassword(t *testing.T) {
+	user, _ := NewUser(
 		"fake-document",
 		"fake-password",
 		"fake-name",
 		"email@example.com",
 		"fake-phone",
-		Admin,
-		now,
+		"admin",
 	)
 
-	require.Equal(t, user.ID, "fake-id")
-	require.Equal(t, user.CreatedAt, now)
-}
+	passwordsMatch := user.ValidatePassword("wrong-password")
+	require.Equal(t, passwordsMatch, false)
 
-func TestRoleEnum(t *testing.T) {
-	unknownRole := Role(2)
-
-	require.Equal(t, Admin.String(), "admin")
-	require.Equal(t, DeliveryMan.String(), "deliveryman")
-	require.Equal(t, unknownRole.String(), "unknown")
+	passwordsMatch = user.ValidatePassword("fake-password")
+	require.Equal(t, passwordsMatch, true)
 }

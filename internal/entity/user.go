@@ -4,25 +4,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
-
-type Role uint8
-
-const (
-	Admin Role = iota
-	DeliveryMan
-)
-
-func (r Role) String() string {
-	switch r {
-	case Admin:
-		return "admin"
-	case DeliveryMan:
-		return "deliveryman"
-	}
-
-	return "unknown"
-}
 
 type User struct {
 	ID        string
@@ -31,15 +14,21 @@ type User struct {
 	Name      string
 	Email     string
 	Phone     string
-	Role      Role
+	Role      string // "admin" or "deliveryman"
 	CreatedAt time.Time
 }
 
-func NewUser(document, password, name, email, phone string, role Role) User {
-	user := User{
+func NewUser(document, password, name, email, phone, role string) (*User, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user := &User{
 		ID:        uuid.NewString(),
 		Document:  document,
-		Password:  password,
+		Password:  string(hash),
 		Name:      name,
 		Email:     email,
 		Phone:     phone,
@@ -47,14 +36,14 @@ func NewUser(document, password, name, email, phone string, role Role) User {
 		CreatedAt: time.Now(),
 	}
 
-	return user
+	return user, nil
 }
 
-func NewExistingUser(id, document, password, name, email, phone string, role Role, createdAt time.Time) User {
-	user := NewUser(document, password, name, email, phone, role)
+func (u *User) ValidatePassword(password string) (passwordsMatch bool) {
+	passwordInBytes := []byte(password)
+	userPasswordInBytes := []byte(u.Password)
 
-	user.ID = id
-	user.CreatedAt = createdAt
+	err := bcrypt.CompareHashAndPassword(userPasswordInBytes, passwordInBytes)
 
-	return user
+	return err == nil
 }
