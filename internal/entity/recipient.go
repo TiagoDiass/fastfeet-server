@@ -39,14 +39,3 @@ func NewRecipient(name string, address Address) Recipient {
 		Address: address,
 	}
 }
-
-func NewRecipientWithID(
-	id,
-	name string,
-	address Address,
-) Recipient {
-	recipient := NewRecipient(name, address)
-	recipient.ID = id
-
-	return recipient
-}
