@@ -24,12 +24,12 @@ type CreateUserOutputDTO struct {
 }
 
 type CreateUserUsecase struct {
-	userRepository repository.UserRepository
+	UserRepository repository.UserRepository
 }
 
 func NewCreateUserUsecase(userRepository repository.UserRepository) *CreateUserUsecase {
 	return &CreateUserUsecase{
-		userRepository: userRepository,
+		UserRepository: userRepository,
 	}
 }
 
@@ -47,7 +47,7 @@ func (u *CreateUserUsecase) Execute(input CreateUserInputDTO) (*CreateUserOutput
 		return nil, err
 	}
 
-	err = u.userRepository.Create(user)
+	err = u.UserRepository.Create(user)
 
 	if err != nil {
 		return nil, err
