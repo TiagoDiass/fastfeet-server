@@ -8,14 +8,14 @@ import (
 )
 
 type User struct {
-	ID        string
-	Document  string
-	Password  string
-	Name      string
-	Email     string
-	Phone     string
-	Role      string // "admin" or "deliveryman"
-	CreatedAt time.Time
+	ID        string    `json:"id"`
+	Document  string    `json:"document"`
+	Password  string    `json:"-"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	Role      string    `json:"role"` // "admin" or "deliveryman"
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 func NewUser(document, password, name, email, phone, role string) (*User, error) {
