@@ -105,3 +105,20 @@ func TestCreatePackageRecipientNotFound(t *testing.T) {
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrRecipientNotExists)
 }
+
+func TestCreatePackageDeliverymanNotFound(t *testing.T) {
+	createPackageUsecase := makeCreatePackageSut()
+
+	input := CreatePackageInputDTO{
+		UserID:        "admin-id",
+		RecipientID:   "recipient-id",
+		DeliverymanID: "non-existent-deliveryman-id",
+		Name:          "Sample Package",
+	}
+
+	output, err := createPackageUsecase.Execute(input)
+
+	require.Nil(t, output)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, ErrDeliverymanNotExists)
+}
