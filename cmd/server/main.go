@@ -6,6 +6,7 @@ import (
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 	"github.com/TiagoDiass/fastfeet-server/internal/infra/web"
 	repositoryimpl "github.com/TiagoDiass/fastfeet-server/internal/repository/repository_impl"
+	packageUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/package"
 	recipientUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/recipient"
 	userUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/user"
 	"github.com/go-chi/chi/v5"
@@ -27,22 +28,30 @@ func main() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&entity.Recipient{}, &entity.User{})
+	db.AutoMigrate(&entity.Recipient{}, &entity.User{}, &entity.Package{})
 
 	recipientRepository := repositoryimpl.NewGormRecipientRepository(db)
 	userRepository := repositoryimpl.NewGormUserRepository(db)
+	packageRepository := repositoryimpl.NewGormPackageRepository(db)
 
 	createUserUsecase := userUsecase.NewCreateUserUsecase(userRepository)
 	createRecipientUsecase := recipientUsecase.NewCreateRecipientUsecase(recipientRepository)
+	createPackageUsecase := packageUsecase.NewCreatePackageUsecase(
+		packageRepository,
+		userRepository,
+		recipientRepository,
+	)
 
 	recipientHandler := web.NewRecipientHandler(createRecipientUsecase)
 	userHandler := web.NewUserHandler(createUserUsecase)
+	packageHandler := web.NewPackageHandler(createPackageUsecase)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
 	router.Post("/recipients", recipientHandler.CreateRecipient)
 	router.Post("/users", userHandler.CreateUser)
+	router.Post("/packages", packageHandler.CreatePackage)
 
 	http.ListenAndServe(":8000", router)
 }

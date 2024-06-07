@@ -9,7 +9,7 @@ import (
 )
 
 type CreatePackageInputDTO struct {
-	UserID        string
+	UserID        string `json:"user_id"`
 	RecipientID   string `json:"recipient_id"`
 	DeliverymanID string `json:"deliveryman_id"`
 	Name          string `json:"name"`
