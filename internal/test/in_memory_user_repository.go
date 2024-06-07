@@ -53,3 +53,13 @@ func (r *InMemoryUserRepository) FindByDocument(document string) (*entity.User, 
 
 	return user, nil
 }
+
+func (r *InMemoryUserRepository) FindAll() ([]*entity.User, error) {
+	var users []*entity.User
+
+	for _, user := range r.users {
+		users = append(users, user)
+	}
+
+	return users, nil
+}
