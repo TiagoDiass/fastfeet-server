@@ -38,6 +38,7 @@ func makeCreatePackageSut() *CreatePackageUsecase {
 	address := entity.NewAddress("Main St", "123", "Downtown", "CA", "12345")
 	recipient := entity.NewRecipient(
 		"Jane Doe",
+		"jane@example.com",
 		address,
 	)
 	recipient.ID = "recipient-id"

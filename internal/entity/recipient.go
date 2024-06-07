@@ -11,8 +11,9 @@ type Address struct {
 }
 
 type Recipient struct {
-	ID   string
-	Name string
+	ID    string
+	Name  string
+	Email string
 	Address
 }
 
@@ -32,10 +33,11 @@ func NewAddress(
 	}
 }
 
-func NewRecipient(name string, address Address) *Recipient {
+func NewRecipient(name, email string, address Address) *Recipient {
 	return &Recipient{
 		ID:      uuid.NewString(),
 		Name:    name,
+		Email:   email,
 		Address: address,
 	}
 }

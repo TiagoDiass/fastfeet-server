@@ -18,7 +18,7 @@ func TestNewAddress(t *testing.T) {
 
 func TestNewRecipient(t *testing.T) {
 	address := NewAddress("Main St", "123", "Downtown", "CA", "12345")
-	recipient := NewRecipient("John Doe", address)
+	recipient := NewRecipient("John Doe", "john@example.com", address)
 
 	require.NotEmpty(t, recipient.ID)
 	require.Equal(t, recipient.Name, "John Doe")
