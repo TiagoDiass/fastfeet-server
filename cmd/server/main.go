@@ -1,15 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 
+	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 	"github.com/TiagoDiass/fastfeet-server/internal/infra/web"
-	"github.com/TiagoDiass/fastfeet-server/internal/test"
+	repositoryimpl "github.com/TiagoDiass/fastfeet-server/internal/repository/repository_impl"
 	recipientUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/recipient"
 	userUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -19,8 +21,16 @@ func main() {
 	// 	panic(err)
 	// }
 
-	recipientRepository := test.NewInMemoryRecipientRepository()
-	userRepository := test.NewInMemoryUserRepository()
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+
+	if err != nil {
+		panic(err)
+	}
+
+	db.AutoMigrate(&entity.Recipient{}, &entity.User{})
+
+	recipientRepository := repositoryimpl.NewGormRecipientRepository(db)
+	userRepository := repositoryimpl.NewGormUserRepository(db)
 
 	createUserUsecase := userUsecase.NewCreateUserUsecase(userRepository)
 	createRecipientUsecase := recipientUsecase.NewCreateRecipientUsecase(recipientRepository)
@@ -31,24 +41,7 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	router.Get("/recipients", func(w http.ResponseWriter, r *http.Request) {
-		recipients, _ := recipientRepository.FindAll()
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(recipients)
-		return
-	})
 	router.Post("/recipients", recipientHandler.CreateRecipient)
-
-	router.Get("/users", func(w http.ResponseWriter, r *http.Request) {
-		users, _ := userRepository.FindAll()
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(users)
-		return
-	})
 	router.Post("/users", userHandler.CreateUser)
 
 	http.ListenAndServe(":8000", router)
