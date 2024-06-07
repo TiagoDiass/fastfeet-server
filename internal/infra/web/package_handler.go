@@ -8,12 +8,17 @@ import (
 )
 
 type PackageHandler struct {
-	CreatePackageUsecase *usecase.CreatePackageUsecase
+	CreatePackageUsecase         *usecase.CreatePackageUsecase
+	ListAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase
 }
 
-func NewPackageHandler(createPackageUsecase *usecase.CreatePackageUsecase) *PackageHandler {
+func NewPackageHandler(
+	createPackageUsecase *usecase.CreatePackageUsecase,
+	listAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase,
+) *PackageHandler {
 	return &PackageHandler{
-		CreatePackageUsecase: createPackageUsecase,
+		CreatePackageUsecase:         createPackageUsecase,
+		ListAvailablePackagesUsecase: listAvailablePackagesUsecase,
 	}
 }
 
@@ -49,5 +54,20 @@ func (h *PackageHandler) CreatePackage(w http.ResponseWriter, req *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(output)
+}
+
+func (h *PackageHandler) ListAvailablePackages(w http.ResponseWriter, req *http.Request) {
+	output, err := h.ListAvailablePackagesUsecase.Execute()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }

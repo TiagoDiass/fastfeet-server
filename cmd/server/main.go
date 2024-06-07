@@ -41,10 +41,11 @@ func main() {
 		userRepository,
 		recipientRepository,
 	)
+	listAvailablePackagesUsecase := packageUsecase.NewListAvailablePackagesUsecase(packageRepository)
 
 	recipientHandler := web.NewRecipientHandler(createRecipientUsecase)
 	userHandler := web.NewUserHandler(createUserUsecase)
-	packageHandler := web.NewPackageHandler(createPackageUsecase)
+	packageHandler := web.NewPackageHandler(createPackageUsecase, listAvailablePackagesUsecase)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
@@ -52,6 +53,7 @@ func main() {
 	router.Post("/recipients", recipientHandler.CreateRecipient)
 	router.Post("/users", userHandler.CreateUser)
 	router.Post("/packages", packageHandler.CreatePackage)
+	router.Get("/packages/available", packageHandler.ListAvailablePackages)
 
 	http.ListenAndServe(":8000", router)
 }
