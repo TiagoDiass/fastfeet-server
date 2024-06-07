@@ -88,3 +88,20 @@ func TestCreatePackageUnauthorizedCase(t *testing.T) {
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrUserIsNotAdmin)
 }
+
+func TestCreatePackageRecipientNotFound(t *testing.T) {
+	createPackageUsecase := makeCreatePackageSut()
+
+	input := CreatePackageInputDTO{
+		UserID:        "admin-id",
+		RecipientID:   "non-existent-recipient-id",
+		DeliverymanID: "deliveryman-id",
+		Name:          "Sample Package",
+	}
+
+	output, err := createPackageUsecase.Execute(input)
+
+	require.Nil(t, output)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, ErrRecipientNotExists)
+}
