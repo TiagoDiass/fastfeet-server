@@ -35,3 +35,15 @@ func (r *InMemoryPackageRepository) FindById(pkgId string) (*entity.Package, err
 
 	return user, nil
 }
+
+func (r *InMemoryPackageRepository) FindAllAvailablePackages() ([]*entity.Package, error) {
+	var availablePackages []*entity.Package
+
+	for _, pkg := range r.packages {
+		if pkg.Status == "WAITING_WITHDRAW" {
+			availablePackages = append(availablePackages, pkg)
+		}
+	}
+
+	return availablePackages, nil
+}
