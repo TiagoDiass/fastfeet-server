@@ -1,6 +1,10 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Package struct {
 	ID            string
@@ -11,36 +15,40 @@ type Package struct {
 	PostedAt      time.Time
 
 	// optional / nullable fields
-	DeliveredPicture string
-	WithdrewAt       time.Time
-	DeliveredAt      time.Time
+	DeliveredPicture *string
+	WithdrewAt       *time.Time
+	DeliveredAt      *time.Time
 }
 
 func NewPackage(recipientId, deliverymanId, name, status string) *Package {
 	p := &Package{
-		RecipientId:   recipientId,
-		DeliverymanId: deliverymanId,
-		Name:          name,
-		Status:        status,
-		PostedAt:      time.Now(),
+		ID:               uuid.NewString(),
+		RecipientId:      recipientId,
+		DeliverymanId:    deliverymanId,
+		Name:             name,
+		Status:           status,
+		PostedAt:         time.Now(),
+		DeliveredPicture: nil,
+		WithdrewAt:       nil,
+		DeliveredAt:      nil,
 	}
 
 	return p
 }
 
-func (p *Package) WithDeliveredPicture(deliveredPictureUrl string) *Package {
+func (p *Package) WithDeliveredPicture(deliveredPictureUrl *string) *Package {
 	p.DeliveredPicture = deliveredPictureUrl
 
 	return p
 }
 
-func (p *Package) WithWithdrewAt(withdrewAt time.Time) *Package {
+func (p *Package) WithWithdrewAt(withdrewAt *time.Time) *Package {
 	p.WithdrewAt = withdrewAt
 
 	return p
 }
 
-func (p *Package) WithDeliveredAt(deliveredAt time.Time) *Package {
+func (p *Package) WithDeliveredAt(deliveredAt *time.Time) *Package {
 	p.DeliveredAt = deliveredAt
 
 	return p

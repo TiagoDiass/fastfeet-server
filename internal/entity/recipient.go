@@ -32,8 +32,8 @@ func NewAddress(
 	}
 }
 
-func NewRecipient(name string, address Address) Recipient {
-	return Recipient{
+func NewRecipient(name string, address Address) *Recipient {
+	return &Recipient{
 		ID:      uuid.NewString(),
 		Name:    name,
 		Address: address,

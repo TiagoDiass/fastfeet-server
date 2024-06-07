@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func makeSut() *CreateSessionUsecase {
+func makeCreateSessionSut() *CreateSessionUsecase {
 	userRepository := test.NewInMemoryUserRepository()
 	jwt := jwtauth.New("HS256", []byte("secret"), nil)
 	expiresIn := 600
@@ -30,7 +30,7 @@ func makeSut() *CreateSessionUsecase {
 }
 
 func TestCreateSessionSuccessCase(t *testing.T) {
-	createSessionUsecase := makeSut()
+	createSessionUsecase := makeCreateSessionSut()
 
 	input := CreateSessionInputDTO{
 		Document: "87847048027",
@@ -45,7 +45,7 @@ func TestCreateSessionSuccessCase(t *testing.T) {
 }
 
 func TestCreateSessionWhenUserNotExists(t *testing.T) {
-	createSessionUsecase := makeSut()
+	createSessionUsecase := makeCreateSessionSut()
 
 	input := CreateSessionInputDTO{
 		Document: "wrong-document",
@@ -60,7 +60,7 @@ func TestCreateSessionWhenUserNotExists(t *testing.T) {
 }
 
 func TestCreateSessionWithWrongPassword(t *testing.T) {
-	createSessionUsecase := makeSut()
+	createSessionUsecase := makeCreateSessionSut()
 
 	input := CreateSessionInputDTO{
 		Document: "87847048027",
