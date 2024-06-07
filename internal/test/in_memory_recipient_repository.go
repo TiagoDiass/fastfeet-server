@@ -11,27 +11,37 @@ var (
 )
 
 type InMemoryRecipientRepository struct {
-	packages map[string]*entity.Recipient
+	recipients map[string]*entity.Recipient
 }
 
 func NewInMemoryRecipientRepository() *InMemoryRecipientRepository {
 	return &InMemoryRecipientRepository{
-		packages: make(map[string]*entity.Recipient),
+		recipients: make(map[string]*entity.Recipient),
 	}
 }
 
 func (r *InMemoryRecipientRepository) Create(recipientId *entity.Recipient) error {
-	r.packages[recipientId.ID] = recipientId
+	r.recipients[recipientId.ID] = recipientId
 
 	return nil
 }
 
 func (r *InMemoryRecipientRepository) FindById(recipientId string) (*entity.Recipient, error) {
-	pkg, exists := r.packages[recipientId]
+	pkg, exists := r.recipients[recipientId]
 
 	if !exists {
 		return nil, ErrRecipientDoesNotExist
 	}
 
 	return pkg, nil
+}
+
+func (r *InMemoryRecipientRepository) FindAll() ([]*entity.Recipient, error) {
+	var recipients []*entity.Recipient
+
+	for _, product := range r.recipients {
+		recipients = append(recipients, product)
+	}
+
+	return recipients, nil
 }
