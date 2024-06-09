@@ -22,7 +22,7 @@ func (r *GormPackageRepository) Create(pkg *entity.Package) error {
 func (r *GormPackageRepository) FindAllAvailablePackages() ([]*entity.Package, error) {
 	var packages []*entity.Package
 
-	err := r.DB.Order("posted_at asc").Find(&packages).Error
+	err := r.DB.Where("status = ?", "WAITING_WITHDRAW").Order("posted_at asc").Find(&packages).Error
 
 	return packages, err
 }
