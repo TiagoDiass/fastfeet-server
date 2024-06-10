@@ -10,15 +10,18 @@ import (
 type PackageHandler struct {
 	CreatePackageUsecase         *usecase.CreatePackageUsecase
 	ListAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase
+	ListDeliveredPackagesUsecase *usecase.ListDeliveredPackagesUsecase
 }
 
 func NewPackageHandler(
 	createPackageUsecase *usecase.CreatePackageUsecase,
 	listAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase,
+	listDeliveredPackagesUsecase *usecase.ListDeliveredPackagesUsecase,
 ) *PackageHandler {
 	return &PackageHandler{
 		CreatePackageUsecase:         createPackageUsecase,
 		ListAvailablePackagesUsecase: listAvailablePackagesUsecase,
+		ListDeliveredPackagesUsecase: listDeliveredPackagesUsecase,
 	}
 }
 
@@ -59,6 +62,21 @@ func (h *PackageHandler) CreatePackage(w http.ResponseWriter, req *http.Request)
 
 func (h *PackageHandler) ListAvailablePackages(w http.ResponseWriter, req *http.Request) {
 	output, err := h.ListAvailablePackagesUsecase.Execute()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(output)
+}
+
+func (h *PackageHandler) ListDeliveredPackages(w http.ResponseWriter, req *http.Request) {
+	output, err := h.ListDeliveredPackagesUsecase.Execute()
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

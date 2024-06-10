@@ -19,10 +19,10 @@ func (r *GormPackageRepository) Create(pkg *entity.Package) error {
 	return r.DB.Create(pkg).Error
 }
 
-func (r *GormPackageRepository) FindAllAvailablePackages() ([]*entity.Package, error) {
+func (r *GormPackageRepository) FindAllByStatus(status string) ([]*entity.Package, error) {
 	var packages []*entity.Package
 
-	err := r.DB.Where("status = ?", "WAITING_WITHDRAW").Order("posted_at asc").Find(&packages).Error
+	err := r.DB.Where("status = ?", status).Order("posted_at asc").Find(&packages).Error
 
 	return packages, err
 }

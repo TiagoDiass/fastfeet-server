@@ -14,10 +14,10 @@ func NewInMemoryPackageRepository() *InMemoryPackageRepository {
 	}
 }
 
-func (r *InMemoryPackageRepository) FindAllAvailablePackages() ([]*entity.Package, error) {
+func (r *InMemoryPackageRepository) FindAllByStatus(status string) ([]*entity.Package, error) {
 	availablePackages := []*entity.Package{}
 	for _, pkg := range r.packages {
-		if pkg.Status == "WAITING_WITHDRAW" {
+		if pkg.Status == status {
 			availablePackages = append(availablePackages, pkg)
 		}
 	}

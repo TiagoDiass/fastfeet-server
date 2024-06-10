@@ -6,7 +6,7 @@ import (
 	"github.com/TiagoDiass/fastfeet-server/internal/repository"
 )
 
-type ListAvailablePackagesOutputDTO struct {
+type ListPackagesOutputDTO struct {
 	ID               string     `json:"id"`
 	RecipientId      string     `json:"recipient_id"`
 	DeliverymanId    string     `json:"deliveryman_id"`
@@ -28,17 +28,17 @@ func NewListAvailablePackagesUsecase(packageRepository repository.PackageReposit
 	}
 }
 
-func (u *ListAvailablePackagesUsecase) Execute() ([]ListAvailablePackagesOutputDTO, error) {
-	packages, err := u.PackageRepository.FindAllAvailablePackages()
+func (u *ListAvailablePackagesUsecase) Execute() ([]ListPackagesOutputDTO, error) {
+	packages, err := u.PackageRepository.FindAllByStatus("WAITING_WITHDRAW")
 
 	if err != nil {
 		return nil, err
 	}
 
-	output := []ListAvailablePackagesOutputDTO{}
+	output := []ListPackagesOutputDTO{}
 
 	for _, pkg := range packages {
-		output = append(output, ListAvailablePackagesOutputDTO{
+		output = append(output, ListPackagesOutputDTO{
 			ID:               pkg.ID,
 			RecipientId:      pkg.RecipientId,
 			DeliverymanId:    pkg.DeliverymanId,
