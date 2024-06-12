@@ -27,7 +27,7 @@ func makeWithdrawPackageSut() *MakeWithdrawPackageSutOutput {
 
 	pkg := entity.NewPackage(
 		"fake-recipient-id",
-		"fake-deliveryman-id",
+		"deliveryman-id",
 		"Package from Amazon to John Doe",
 		"WAITING_WITHDRAW",
 	)
@@ -84,4 +84,30 @@ func TestWithdrawPackageWhenPackageNotExists(t *testing.T) {
 	require.Nil(t, pkg)
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrPackageNotExists)
+}
+
+func TestWithdrawPackageWhenPackageWasAlreadyWithdrew(t *testing.T) {
+	sut := makeWithdrawPackageSut()
+
+	pkg := entity.NewPackage(
+		"fake-recipient-id",
+		"fake-deliveryman-id",
+		"Package from Amazon to John Doe",
+		"ON_GOING",
+	)
+	pkg.ID = "already-withdrew-package-id"
+
+	err := sut.packageRepository.Create(pkg)
+	require.Nil(t, err)
+
+	input := WithdrawPackageInputDTO{
+		PackageID:     "already-withdrew-package-id",
+		DeliverymanID: "deliveryman-id",
+	}
+
+	pkg, err = sut.withdrawPackageUsecase.Execute(input)
+
+	require.Nil(t, pkg)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, ErrPackageWasAlreadyWithdrew)
 }
