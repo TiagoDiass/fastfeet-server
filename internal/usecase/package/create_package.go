@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"time"
 
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
@@ -44,12 +43,6 @@ func NewCreatePackageUsecase(
 		RecipientRepository: recipientRepository,
 	}
 }
-
-var (
-	ErrUserIsNotAdmin       = errors.New("unauthorized: only admins can create packages")
-	ErrRecipientNotExists   = errors.New("recipient does not exist")
-	ErrDeliverymanNotExists = errors.New("deliveryman does not exist")
-)
 
 func (u *CreatePackageUsecase) Execute(input CreatePackageInputDTO) (*CreatePackageOutputDTO, error) {
 	user, err := u.UserRepository.FindById(input.UserID)
