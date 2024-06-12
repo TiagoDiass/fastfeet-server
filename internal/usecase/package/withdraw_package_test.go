@@ -111,3 +111,18 @@ func TestWithdrawPackageWhenPackageWasAlreadyWithdrew(t *testing.T) {
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrPackageWasAlreadyWithdrew)
 }
+
+func TestWithdrawPackageWhenDeliverymanNotExists(t *testing.T) {
+	sut := makeWithdrawPackageSut()
+
+	input := WithdrawPackageInputDTO{
+		PackageID:     "package-id",
+		DeliverymanID: "non-existent-deliveryman-id",
+	}
+
+	pkg, err := sut.withdrawPackageUsecase.Execute(input)
+
+	require.Nil(t, pkg)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, ErrDeliverymanNotExists)
+}
