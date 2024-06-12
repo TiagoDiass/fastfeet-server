@@ -36,6 +36,15 @@ func NewPackage(recipientId, deliverymanId, name, status string) *Package {
 	return p
 }
 
+func (p *Package) Withdraw() *Package {
+	now := time.Now()
+
+	p.WithdrewAt = &now
+	p.Status = "ON_GOING"
+
+	return p
+}
+
 func (p *Package) WithDeliveredPicture(deliveredPictureUrl *string) *Package {
 	p.DeliveredPicture = deliveredPictureUrl
 
