@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrUserDoesNotExist = errors.New("user does not exist")
+	ErrUserNotExists        = errors.New("user does not exist")
+	ErrDeliverymanNotExists = errors.New("user does not exist")
 )
 
 type InMemoryUserRepository struct {
@@ -33,7 +34,7 @@ func (r *InMemoryUserRepository) FindById(userId string) (*entity.User, error) {
 	user, exists := r.users[userId]
 
 	if !exists {
-		return nil, ErrUserDoesNotExist
+		return nil, ErrUserNotExists
 	}
 
 	return user, nil
@@ -48,7 +49,7 @@ func (r *InMemoryUserRepository) FindByDocument(document string) (*entity.User, 
 	user, exists := r.usersIndexedByDocument[document]
 
 	if !exists {
-		return nil, ErrUserDoesNotExist
+		return nil, ErrUserNotExists
 	}
 
 	return user, nil
@@ -62,4 +63,14 @@ func (r *InMemoryUserRepository) FindAll() ([]*entity.User, error) {
 	}
 
 	return users, nil
+}
+
+func (r *InMemoryUserRepository) FindDeliverymanById(deliverymanId string) (*entity.User, error) {
+	user, exists := r.users[deliverymanId]
+
+	if !exists || user.Role != "deliveryman" {
+		return nil, ErrDeliverymanNotExists
+	}
+
+	return user, nil
 }

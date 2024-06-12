@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	ErrRecipientDoesNotExist = errors.New("recipient does not exist")
+	ErrRecipientNotExists = errors.New("recipient does not exist")
 )
 
 type InMemoryRecipientRepository struct {
@@ -30,7 +30,7 @@ func (r *InMemoryRecipientRepository) FindById(recipientId string) (*entity.Reci
 	pkg, exists := r.recipients[recipientId]
 
 	if !exists {
-		return nil, ErrRecipientDoesNotExist
+		return nil, ErrRecipientNotExists
 	}
 
 	return pkg, nil
