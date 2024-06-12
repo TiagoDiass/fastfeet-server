@@ -70,3 +70,18 @@ func TestWithdrawPackageSuccessCase(t *testing.T) {
 	require.Equal(t, pkgFromDb.Status, "ON_GOING")
 	require.NotEmpty(t, pkgFromDb.WithdrewAt)
 }
+
+func TestWithdrawPackageWhenPackageNotExists(t *testing.T) {
+	sut := makeWithdrawPackageSut()
+
+	input := WithdrawPackageInputDTO{
+		PackageID:     "non-existent-package-id",
+		DeliverymanID: "deliveryman-id",
+	}
+
+	pkg, err := sut.withdrawPackageUsecase.Execute(input)
+
+	require.Nil(t, pkg)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, ErrPackageNotExists)
+}
