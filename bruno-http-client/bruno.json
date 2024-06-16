@@ -1,0 +1,472 @@
+{
+  "name": "Golang",
+  "version": "1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "Fastfeet",
+      "items": [
+        {
+          "type": "http",
+          "name": "CreatePackage",
+          "seq": 5,
+          "request": {
+            "url": "http://localhost:8000/packages",
+            "method": "POST",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"user_id\": \"264eb9e0-e163-4f56-b58d-9392717deeb6\",\n  \"recipient_id\": \"ba45a269-4e2b-46d7-bbe2-5d139c671bbe\",\n  \"deliveryman_id\": \"502949b6-9349-4dac-a620-eae52ed6de1c\",\n  \"name\": \"Pacote do Mercado Livre #3\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "CreateRecipients",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8000/recipients",
+            "method": "POST",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "/* {\n  \"name\": \"Moisés da Costa\",\n  \"email\": \"moises@gmail.com\",\n  \"street\": \"Rua da Alegria\",\n  \"house_number\": \"123\",\n  \"district\": \"Jardim das Emoções\",\n  \"state\": \"SP\",\n  \"zipcode\": \"12750-830\"\n} */\n\n{\n  \"name\": \"Daniel Jonas\",\n  \"email\": \"daniel@gmail.com\",\n  \"street\": \"Rua da Benção\",\n  \"house_number\": \"950\",\n  \"district\": \"Jardim das Emoções\",\n  \"state\": \"SP\",\n  \"zipcode\": \"12950860\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "CreateUser",
+          "seq": 4,
+          "request": {
+            "url": "http://localhost:8000/users",
+            "method": "POST",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"document\": \"98727389046\",\n  \"name\": \"Marcos do Mercado Livre\",\n  \"email\": \"marcos@mercadolivre.com.br\",\n  \"password\": \"teste-123\",\n  \"phone\": \"1912345880\",\n  \"role\": \"deliveryman\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "GetAvailablePackages",
+          "seq": 6,
+          "request": {
+            "url": "http://localhost:8000/packages/available",
+            "method": "GET",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "GetDeliveredPackages",
+          "seq": 7,
+          "request": {
+            "url": "http://localhost:8000/packages/delivered",
+            "method": "GET",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "GetRecipients",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8000/recipients",
+            "method": "GET",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "GetUsers",
+          "seq": 3,
+          "request": {
+            "url": "http://localhost:8000/users",
+            "method": "GET",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Fullcycle API 1",
+      "items": [
+        {
+          "type": "http",
+          "name": "CreateProduct",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8000/products",
+            "method": "POST",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTczNDQ3NzAsInN1YiI6ImQ1YmY0YWYyLTc2M2YtNDRkOS1iN2JmLWM5NGMzYTFiODU3OCJ9.9wnm1zI5E6a28TEcBb7uOOPnGSzEV5W8WNu0pTPDtwU",
+                "enabled": true
+              }
+            ],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"teste\",\n  \"price\": 0\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "CreateSession",
+          "seq": 7,
+          "request": {
+            "url": "http://localhost:8000/session",
+            "method": "POST",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"email\": \"tiago@gmail.com\",\n  \"password\": \"teste123\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "CreateUser",
+          "seq": 6,
+          "request": {
+            "url": "http://localhost:8000/users",
+            "method": "POST",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"Tiago\",\n  \"email\": \"tiago@gmail.com\",\n  \"password\": \"teste123\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "DeleteProduct",
+          "seq": 4,
+          "request": {
+            "url": "http://localhost:8000/products/6f41d7a6-bbab-4fd1-9e9f-b18d1cd96798",
+            "method": "DELETE",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"Asus Vivobook 12\",\n  \"price\": 9500\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "GetProductByID",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8000/products/832a14a4-99a0-4646-a1d2-50e09154937a",
+            "method": "GET",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"Asus Vivobook 12\",\n  \"price\": 9500\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "ListProducts",
+          "seq": 5,
+          "request": {
+            "url": "http://localhost:8000/products?page=1&limit=10",
+            "method": "GET",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTczNDQzMzksInN1YiI6ImQ1YmY0YWYyLTc2M2YtNDRkOS1iN2JmLWM5NGMzYTFiODU3OCJ9.En0kN-vvnv_OF21evNXns9GwkyFwfRH9G61Na0TjnuU",
+                "enabled": true
+              }
+            ],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"Asus Vivobook 12\",\n  \"price\": 9500\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": [
+              {
+                "name": "page",
+                "value": "1",
+                "enabled": true
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "enabled": true
+              }
+            ]
+          }
+        },
+        {
+          "type": "http",
+          "name": "UpdateProduct",
+          "seq": 3,
+          "request": {
+            "url": "http://localhost:8000/products/32b2eec9-10b8-4bad-8655-f489ef017593",
+            "method": "PUT",
+            "headers": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"iPhone 14\",\n  \"price\": 7200\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "query": []
+          }
+        }
+      ]
+    }
+  ],
+  "environments": []
+}
