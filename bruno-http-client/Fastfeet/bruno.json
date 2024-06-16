@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Fastfeet",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
