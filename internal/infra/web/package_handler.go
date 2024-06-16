@@ -11,17 +11,20 @@ type PackageHandler struct {
 	CreatePackageUsecase         *usecase.CreatePackageUsecase
 	ListAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase
 	ListDeliveredPackagesUsecase *usecase.ListDeliveredPackagesUsecase
+	WithdrawPackageUsecase       *usecase.WithdrawPackageUsecase
 }
 
 func NewPackageHandler(
 	createPackageUsecase *usecase.CreatePackageUsecase,
 	listAvailablePackagesUsecase *usecase.ListAvailablePackagesUsecase,
 	listDeliveredPackagesUsecase *usecase.ListDeliveredPackagesUsecase,
+	withdrawPackageUsecase *usecase.WithdrawPackageUsecase,
 ) *PackageHandler {
 	return &PackageHandler{
 		CreatePackageUsecase:         createPackageUsecase,
 		ListAvailablePackagesUsecase: listAvailablePackagesUsecase,
 		ListDeliveredPackagesUsecase: listDeliveredPackagesUsecase,
+		WithdrawPackageUsecase:       withdrawPackageUsecase,
 	}
 }
 
@@ -80,6 +83,42 @@ func (h *PackageHandler) ListDeliveredPackages(w http.ResponseWriter, req *http.
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(output)
+}
+
+// TODO WHEN GET BACK TO CODE: update repositories so app can build and then test the withdraw package endpoint
+func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Request) {
+	// TODO: refactor later to get UserID on request headers or context, idk
+
+	var input usecase.WithdrawPackageInputDTO
+	err := json.NewDecoder(req.Body).Decode(&input)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+
+	output, err := h.WithdrawPackageUsecase.Execute(input)
+
+	if err != nil {
+		switch err {
+		case usecase.ErrPackageNotExists, usecase.ErrDeliverymanNotExists:
+			w.WriteHeader(http.StatusNotFound)
+		case usecase.ErrPackageWasAlreadyWithdrew:
+			w.WriteHeader(http.StatusBadRequest)
+		default:
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
 		error := Error{Message: err.Error()}
 		json.NewEncoder(w).Encode(error)
 		return
