@@ -24,17 +24,6 @@ func makeCreatePackageSut() *CreatePackageUsecase {
 	admin.ID = "admin-id"
 	userRepository.Create(admin)
 
-	deliveryman, _ := entity.NewUser(
-		"27661520087",
-		"another-password",
-		"Deliveryman",
-		"deliveryman@example.com",
-		"fake-phone",
-		"deliveryman",
-	)
-	deliveryman.ID = "deliveryman-id"
-	userRepository.Create(deliveryman)
-
 	address := entity.NewAddress("Main St", "123", "Downtown", "CA", "12345")
 	recipient := entity.NewRecipient(
 		"Jane Doe",
@@ -57,10 +46,9 @@ func TestCreatePackageSuccessCase(t *testing.T) {
 	createPackageUsecase := makeCreatePackageSut()
 
 	input := CreatePackageInputDTO{
-		UserID:        "admin-id",
-		RecipientID:   "recipient-id",
-		DeliverymanID: "deliveryman-id",
-		Name:          "Sample Package",
+		UserID:      "admin-id",
+		RecipientID: "recipient-id",
+		Name:        "Sample Package",
 	}
 
 	output, err := createPackageUsecase.Execute(input)
@@ -69,18 +57,17 @@ func TestCreatePackageSuccessCase(t *testing.T) {
 	require.NotNil(t, output)
 	require.Equal(t, output.Name, input.Name)
 	require.Equal(t, output.RecipientId, input.RecipientID)
-	require.Equal(t, output.DeliverymanId, input.DeliverymanID)
 	require.Equal(t, output.Status, "WAITING_WITHDRAW")
+	require.Nil(t, output.DeliverymanId)
 }
 
 func TestCreatePackageUnauthorizedCase(t *testing.T) {
 	createPackageUsecase := makeCreatePackageSut()
 
 	input := CreatePackageInputDTO{
-		UserID:        "deliveryman-id",
-		RecipientID:   "recipient-id",
-		DeliverymanID: "deliveryman-id",
-		Name:          "Sample Package",
+		UserID:      "non-existent-admin",
+		RecipientID: "recipient-id",
+		Name:        "Sample Package",
 	}
 
 	output, err := createPackageUsecase.Execute(input)
@@ -94,10 +81,9 @@ func TestCreatePackageRecipientNotFound(t *testing.T) {
 	createPackageUsecase := makeCreatePackageSut()
 
 	input := CreatePackageInputDTO{
-		UserID:        "admin-id",
-		RecipientID:   "non-existent-recipient-id",
-		DeliverymanID: "deliveryman-id",
-		Name:          "Sample Package",
+		UserID:      "admin-id",
+		RecipientID: "non-existent-recipient-id",
+		Name:        "Sample Package",
 	}
 
 	output, err := createPackageUsecase.Execute(input)
@@ -105,38 +91,4 @@ func TestCreatePackageRecipientNotFound(t *testing.T) {
 	require.Nil(t, output)
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrRecipientNotExists)
-}
-
-func TestCreatePackageDeliverymanNotFound(t *testing.T) {
-	createPackageUsecase := makeCreatePackageSut()
-
-	input := CreatePackageInputDTO{
-		UserID:        "admin-id",
-		RecipientID:   "recipient-id",
-		DeliverymanID: "non-existent-deliveryman-id",
-		Name:          "Sample Package",
-	}
-
-	output, err := createPackageUsecase.Execute(input)
-
-	require.Nil(t, output)
-	require.NotNil(t, err)
-	require.ErrorIs(t, err, ErrDeliverymanNotExists)
-}
-
-func TestCreatePackageWithInvalidDeliverymanRole(t *testing.T) {
-	createPackageUsecase := makeCreatePackageSut()
-
-	input := CreatePackageInputDTO{
-		UserID:        "admin-id",
-		RecipientID:   "recipient-id",
-		DeliverymanID: "admin-id",
-		Name:          "Sample Package",
-	}
-
-	output, err := createPackageUsecase.Execute(input)
-
-	require.Nil(t, output)
-	require.NotNil(t, err)
-	require.ErrorIs(t, err, ErrDeliverymanNotExists)
 }

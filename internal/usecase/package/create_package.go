@@ -1,29 +1,14 @@
 package usecase
 
 import (
-	"time"
-
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 	"github.com/TiagoDiass/fastfeet-server/internal/repository"
 )
 
 type CreatePackageInputDTO struct {
-	UserID        string `json:"user_id"`
-	RecipientID   string `json:"recipient_id"`
-	DeliverymanID string `json:"deliveryman_id"`
-	Name          string `json:"name"`
-}
-
-type CreatePackageOutputDTO struct {
-	ID               string     `json:"id"`
-	RecipientId      string     `json:"recipient_id"`
-	DeliverymanId    string     `json:"deliveryman_id"`
-	Name             string     `json:"name"`
-	Status           string     `json:"status"` // WAITING_WITHDRAW
-	PostedAt         time.Time  `json:"posted_at"`
-	DeliveredPicture *string    `json:"delivered_picture"`
-	WithdrewAt       *time.Time `json:"withdrew_at"`
-	DeliveredAt      *time.Time `json:"delivered_at"`
+	UserID      string `json:"user_id"`
+	RecipientID string `json:"recipient_id"`
+	Name        string `json:"name"`
 }
 
 type CreatePackageUsecase struct {
@@ -44,7 +29,7 @@ func NewCreatePackageUsecase(
 	}
 }
 
-func (u *CreatePackageUsecase) Execute(input CreatePackageInputDTO) (*CreatePackageOutputDTO, error) {
+func (u *CreatePackageUsecase) Execute(input CreatePackageInputDTO) (*entity.Package, error) {
 	user, err := u.UserRepository.FindById(input.UserID)
 
 	if err != nil || user.Role != "admin" {
@@ -57,17 +42,9 @@ func (u *CreatePackageUsecase) Execute(input CreatePackageInputDTO) (*CreatePack
 		return nil, ErrRecipientNotExists
 	}
 
-	deliveryman, err := u.UserRepository.FindById(input.DeliverymanID)
-
-	if err != nil || deliveryman.Role != "deliveryman" {
-		return nil, ErrDeliverymanNotExists
-	}
-
 	pkg := entity.NewPackage(
 		input.RecipientID,
-		input.DeliverymanID,
 		input.Name,
-		"WAITING_WITHDRAW",
 	)
 
 	err = u.PackageRepository.Create(pkg)
@@ -76,17 +53,5 @@ func (u *CreatePackageUsecase) Execute(input CreatePackageInputDTO) (*CreatePack
 		return nil, err
 	}
 
-	output := &CreatePackageOutputDTO{
-		ID:               pkg.ID,
-		RecipientId:      pkg.RecipientId,
-		DeliverymanId:    pkg.DeliverymanId,
-		Name:             pkg.Name,
-		Status:           pkg.Status,
-		PostedAt:         pkg.PostedAt,
-		DeliveredPicture: pkg.DeliveredPicture,
-		WithdrewAt:       pkg.WithdrewAt,
-		DeliveredAt:      pkg.DeliveredAt,
-	}
-
-	return output, nil
+	return pkg, nil
 }

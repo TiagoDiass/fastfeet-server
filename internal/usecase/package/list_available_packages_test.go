@@ -13,21 +13,21 @@ func makeListAvailablePackagesSut() *ListAvailablePackagesUsecase {
 
 	packageRepository.Create(entity.NewPackage(
 		"fake-recipient-id",
-		"fake-deliveryman-id",
 		"Package 1",
-		"WAITING_WITHDRAW",
 	))
-	packageRepository.Create(entity.NewPackage(
+
+	deliveredPkg := entity.NewPackage(
 		"fake-recipient-id",
-		"fake-deliveryman-id",
 		"Package 2",
-		"DELIVERED",
-	))
+	)
+	deliveredPkg.Status = "DELIVERED"
+	deliverymanId := "fake-deliveryman-id"
+	deliveredPkg.DeliverymanId = &deliverymanId
+
+	packageRepository.Create(deliveredPkg)
 	packageRepository.Create(entity.NewPackage(
 		"fake-recipient-id",
-		"fake-deliveryman-id",
 		"Package 3",
-		"WAITING_WITHDRAW",
 	))
 
 	listAvailablePackages := NewListAvailablePackagesUsecase(packageRepository)

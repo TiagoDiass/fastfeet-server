@@ -10,24 +10,27 @@ import (
 
 func makeListDeliveredPackagesSut() *ListDeliveredPackagesUsecase {
 	packageRepository := test.NewInMemoryPackageRepository()
+	deliverymanId := "fake-deliveryman-id"
+
+	deliveredPkg1 := entity.NewPackage(
+		"fake-recipient-id",
+		"Package 1",
+	)
+	deliveredPkg1.Status = "DELIVERED"
+	deliveredPkg1.DeliverymanId = &deliverymanId
+	packageRepository.Create(deliveredPkg1)
+
+	deliveredPkg2 := entity.NewPackage(
+		"fake-recipient-id",
+		"Package 2",
+	)
+	deliveredPkg2.Status = "DELIVERED"
+	deliveredPkg2.DeliverymanId = &deliverymanId
+	packageRepository.Create(deliveredPkg2)
 
 	packageRepository.Create(entity.NewPackage(
 		"fake-recipient-id",
-		"fake-deliveryman-id",
-		"Package 1",
-		"DELIVERED",
-	))
-	packageRepository.Create(entity.NewPackage(
-		"fake-recipient-id",
-		"fake-deliveryman-id",
-		"Package 2",
-		"DELIVERED",
-	))
-	packageRepository.Create(entity.NewPackage(
-		"fake-recipient-id",
-		"fake-deliveryman-id",
 		"Package 3",
-		"WAITING_WITHDRAW",
 	))
 
 	listDeliveredPackages := NewListDeliveredPackagesUsecase(packageRepository)

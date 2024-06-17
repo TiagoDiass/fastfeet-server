@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 	"github.com/TiagoDiass/fastfeet-server/internal/repository"
 )
 
@@ -14,28 +15,12 @@ func NewListDeliveredPackagesUsecase(packageRepository repository.PackageReposit
 	}
 }
 
-func (u *ListDeliveredPackagesUsecase) Execute() ([]ListPackagesOutputDTO, error) {
+func (u *ListDeliveredPackagesUsecase) Execute() ([]*entity.Package, error) {
 	packages, err := u.PackageRepository.FindAllByStatus("DELIVERED")
 
 	if err != nil {
 		return nil, err
 	}
 
-	output := []ListPackagesOutputDTO{}
-
-	for _, pkg := range packages {
-		output = append(output, ListPackagesOutputDTO{
-			ID:               pkg.ID,
-			RecipientId:      pkg.RecipientId,
-			DeliverymanId:    pkg.DeliverymanId,
-			Name:             pkg.Name,
-			Status:           pkg.Status,
-			PostedAt:         pkg.PostedAt,
-			DeliveredPicture: pkg.DeliveredPicture,
-			WithdrewAt:       pkg.WithdrewAt,
-			DeliveredAt:      pkg.DeliveredAt,
-		})
-	}
-
-	return output, nil
+	return packages, nil
 }

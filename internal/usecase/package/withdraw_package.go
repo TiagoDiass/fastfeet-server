@@ -42,7 +42,7 @@ func (u *WithdrawPackageUsecase) Execute(input WithdrawPackageInputDTO) (*entity
 		return nil, ErrDeliverymanNotExists
 	}
 
-	pkg = pkg.Withdraw()
+	pkg = pkg.Withdraw(input.DeliverymanID)
 
 	err = u.PackageRepository.Update(pkg)
 
