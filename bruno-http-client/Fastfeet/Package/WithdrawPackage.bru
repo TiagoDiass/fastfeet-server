@@ -1,0 +1,26 @@
+meta {
+  name: WithdrawPackage
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8000/packages/withdraw/6f43a781-7d76-454c-9e3b-fab9dd3c16db
+  body: json
+  auth: none
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "deliveryman_id": "f093fd19-61bb-48b8-a08c-3c0dbe60b209"
+  }
+}

@@ -26,3 +26,19 @@ func (r *GormPackageRepository) FindAllByStatus(status string) ([]*entity.Packag
 
 	return packages, err
 }
+
+func (r *GormPackageRepository) FindById(id string) (*entity.Package, error) {
+	var pkg entity.Package
+
+	err := r.DB.Where("id = ?", id).First(&pkg).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pkg, nil
+}
+
+func (r *GormPackageRepository) Update(pkg *entity.Package) error {
+	return r.DB.Save(pkg).Error
+}

@@ -7,17 +7,17 @@ import (
 )
 
 type Package struct {
-	ID            string
-	RecipientId   string
-	DeliverymanId string
-	Name          string
-	Status        string // WAITING_WITHDRAW | ON_GOING | DELIVERED | RETURNED
-	PostedAt      time.Time
+	ID            string    `json:"id"`
+	RecipientId   string    `json:"recipient_id"`
+	DeliverymanId string    `json:"deliveryman_id"`
+	Name          string    `json:"name"`
+	Status        string    `json:"status"` // WAITING_WITHDRAW | ON_GOING | DELIVERED | RETURNED
+	PostedAt      time.Time `json:"posted_at"`
 
 	// optional / nullable fields
-	DeliveredPicture *string
-	WithdrewAt       *time.Time
-	DeliveredAt      *time.Time
+	DeliveredPicture *string    `json:"delivered_picture"`
+	WithdrewAt       *time.Time `json:"withdrew_at"`
+	DeliveredAt      *time.Time `json:"delivered_at"`
 }
 
 func NewPackage(recipientId, deliverymanId, name, status string) *Package {

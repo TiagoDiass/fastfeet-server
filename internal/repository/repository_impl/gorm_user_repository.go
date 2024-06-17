@@ -29,6 +29,18 @@ func (r *GormUserRepository) FindById(id string) (*entity.User, error) {
 	return &user, nil
 }
 
+func (r *GormUserRepository) FindDeliverymanById(id string) (*entity.User, error) {
+	var user entity.User
+
+	err := r.DB.Where(&entity.User{ID: id, Role: "deliveryman"}).First(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (r *GormUserRepository) FindByDocument(document string) (*entity.User, error) {
 	var user entity.User
 

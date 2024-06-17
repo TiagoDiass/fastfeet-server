@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	usecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/package"
+	"github.com/go-chi/chi/v5"
 )
 
 type PackageHandler struct {
@@ -93,11 +94,18 @@ func (h *PackageHandler) ListDeliveredPackages(w http.ResponseWriter, req *http.
 	json.NewEncoder(w).Encode(output)
 }
 
-// TODO WHEN GET BACK TO CODE: update repositories so app can build and then test the withdraw package endpoint
 func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Request) {
 	// TODO: refactor later to get UserID on request headers or context, idk
-
 	var input usecase.WithdrawPackageInputDTO
+	packageId := chi.URLParam(req, "packageId")
+
+	if packageId == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	input.PackageID = packageId
+
 	err := json.NewDecoder(req.Body).Decode(&input)
 
 	if err != nil {
