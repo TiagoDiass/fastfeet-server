@@ -81,32 +81,21 @@ func TestConfirmDeliveredPackageWhenPackageCannotBeDelivered(t *testing.T) {
 
 	require.NotNil(t, err)
 	require.Nil(t, output)
-	require.Equal(t, ErrPackageCannotBeDelivered, err)
+	require.Equal(t, err, ErrPackageCannotBeDelivered)
 }
 
-// func TestConfirmDeliveredPackageWhenPackageDeliverymanIsDifferent(t *testing.T) {
-// 	usecase, repo := makeConfirmDeliveredPackageSut()
+func TestConfirmDeliveredPackageWhenPackageDeliverymanIsDifferent(t *testing.T) {
+	confirmDeliveredPackageUsecase, _ := makeConfirmDeliveredPackageSut()
 
-// 	// Add a package with a different deliveryman to the repository
-// 	pkg := &entity.Package{
-// 		ID:            "pkg1",
-// 		RecipientId:   "rec1",
-// 		DeliverymanId: "del2",
-// 		Name:          "Package 1",
-// 		Status:        "ON_GOING",
-// 		PostedAt:      time.Now(),
-// 	}
-// 	repo.Create(pkg)
+	input := ConfirmDeliveredPackageInputDTO{
+		PackageID:           "fake-package-id",
+		DeliverymanID:       "different-deliveryman-id",
+		DeliveredPictureURL: "https://example.com/picture.jpg",
+	}
 
-// 	input := ConfirmDeliveredPackageInputDTO{
-// 		PackageID:           "pkg1",
-// 		DeliverymanID:       "del1",
-// 		DeliveredPictureURL: "http://example.com/picture.jpg",
-// 	}
+	output, err := confirmDeliveredPackageUsecase.Execute(input)
 
-// 	output, err := usecase.Execute(input)
-
-// 	require.NotNil(t, err)
-// 	require.Nil(t, output)
-// 	require.Equal(t, ErrDifferentDeliveryman, err)
-// }
+	require.NotNil(t, err)
+	require.Nil(t, output)
+	require.Equal(t, err, ErrDifferentDeliveryman)
+}
