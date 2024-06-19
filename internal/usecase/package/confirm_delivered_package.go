@@ -6,22 +6,20 @@ import (
 )
 
 type ConfirmDeliveredPackageInputDTO struct {
-	PackageID     string `json:"package_id"`
-	DeliverymanID string `json:"deliveryman_id"`
+	PackageID           string
+	DeliverymanID       string `json:"deliveryman_id"`
+	DeliveredPictureURL string `json:"delivered_picture_url"`
 }
 
 type ConfirmDeliveredPackageUsecase struct {
 	PackageRepository repository.PackageRepository
-	UserRepository    repository.UserRepository
 }
 
 func NewConfirmDeliveredPackageUsecase(
 	packageRepository repository.PackageRepository,
-	userRepository repository.UserRepository,
 ) *ConfirmDeliveredPackageUsecase {
 	return &ConfirmDeliveredPackageUsecase{
 		PackageRepository: packageRepository,
-		UserRepository:    userRepository,
 	}
 }
 
@@ -32,17 +30,15 @@ func (u *ConfirmDeliveredPackageUsecase) Execute(input ConfirmDeliveredPackageIn
 		return nil, ErrPackageNotExists
 	}
 
-	if pkg.Status != "WAITING_WITHDRAW" {
-		return nil, ErrPackageWasAlreadyWithdrew
+	if pkg.Status != "ON_GOING" {
+		return nil, ErrPackageCannotBeDelivered
 	}
 
-	_, err = u.UserRepository.FindDeliverymanById(input.DeliverymanID)
-
-	if err != nil {
-		return nil, ErrDeliverymanNotExists
+	if *pkg.DeliverymanId != input.DeliverymanID {
+		return nil, ErrDifferentDeliveryman
 	}
 
-	// pkg = pkg.Withdraw()
+	pkg = pkg.MarkAsDelivered(input.DeliveredPictureURL)
 
 	err = u.PackageRepository.Update(pkg)
 

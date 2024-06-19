@@ -45,3 +45,13 @@ func (p *Package) Withdraw(deliverymanId string) *Package {
 
 	return p
 }
+
+func (p *Package) MarkAsDelivered(deliveredPictureUrl string) *Package {
+	now := time.Now()
+
+	p.DeliveredAt = &now
+	p.DeliveredPicture = &deliveredPictureUrl
+	p.Status = "DELIVERED"
+
+	return p
+}
