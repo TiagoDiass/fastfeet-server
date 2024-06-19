@@ -44,6 +44,7 @@ func main() {
 	listAvailablePackagesUsecase := packageUsecase.NewListAvailablePackagesUsecase(packageRepository)
 	listDeliveredPackagesUsecase := packageUsecase.NewListDeliveredPackagesUsecase(packageRepository)
 	withdrawPackageUsecase := packageUsecase.NewWithdrawPackageUsecase(packageRepository, userRepository)
+	confirmDeliveredPackageUsecase := packageUsecase.NewConfirmDeliveredPackageUsecase(packageRepository)
 
 	recipientHandler := web.NewRecipientHandler(createRecipientUsecase)
 	userHandler := web.NewUserHandler(createUserUsecase)
@@ -52,6 +53,7 @@ func main() {
 		listAvailablePackagesUsecase,
 		listDeliveredPackagesUsecase,
 		withdrawPackageUsecase,
+		confirmDeliveredPackageUsecase,
 	)
 
 	router := chi.NewRouter()
@@ -63,6 +65,7 @@ func main() {
 	router.Get("/packages/available", packageHandler.ListAvailablePackages)
 	router.Get("/packages/delivered", packageHandler.ListDeliveredPackages)
 	router.Patch("/packages/withdraw/{packageId}", packageHandler.WithdrawPackage)
+	router.Patch("/packages/confirm-delivery/{packageId}", packageHandler.ConfirmDeliveredPackage)
 
 	http.ListenAndServe(":8000", router)
 }

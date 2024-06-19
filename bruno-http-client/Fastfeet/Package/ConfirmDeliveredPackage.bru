@@ -1,0 +1,27 @@
+meta {
+  name: ConfirmDeliveredPackage
+  type: http
+  seq: 5
+}
+
+patch {
+  url: http://localhost:8000/packages/confirm-delivery/9d6884ff-196e-4090-8927-602f95d5cba2
+  body: json
+  auth: none
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "deliveryman_id": "a26679ce-23a6-4256-904a-9b5100778e2a",
+    "delivered_picture_url": "https://fake-picture-url.com"
+  }
+}
