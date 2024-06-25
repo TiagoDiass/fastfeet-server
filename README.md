@@ -4,7 +4,7 @@
 
 ### Todo:
 
-- Refactor main.go to be easier to read (separate stuff)
+- [x] Refactor main.go to be easier to read (separate stuff)
 - Add authentication
 - Add tests to http handlers
   - [ ] User handlers
