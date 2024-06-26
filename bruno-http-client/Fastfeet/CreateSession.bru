@@ -1,0 +1,18 @@
+meta {
+  name: CreateSession
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8000/session
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "document": "16739000034",
+    "password": "teste-123"
+  }
+}

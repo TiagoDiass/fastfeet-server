@@ -56,7 +56,7 @@ func TestCreateSessionWhenUserNotExists(t *testing.T) {
 
 	require.Nil(t, output)
 	require.NotNil(t, err)
-	require.ErrorContains(t, err, "user does not exist")
+	require.Equal(t, err, test.ErrUserNotExists)
 }
 
 func TestCreateSessionWithWrongPassword(t *testing.T) {
@@ -71,5 +71,5 @@ func TestCreateSessionWithWrongPassword(t *testing.T) {
 
 	require.Nil(t, output)
 	require.NotNil(t, err)
-	require.ErrorContains(t, err, "unauthorized")
+	require.Equal(t, err, ErrUnauthorized)
 }

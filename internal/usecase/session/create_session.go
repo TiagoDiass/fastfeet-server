@@ -8,6 +8,10 @@ import (
 	"github.com/go-chi/jwtauth"
 )
 
+var (
+	ErrUnauthorized = errors.New("unauthorized")
+)
+
 type CreateSessionInputDTO struct {
 	Document string `json:"document"`
 	Password string `json:"password"`
@@ -45,7 +49,7 @@ func (u *CreateSessionUsecase) Execute(input CreateSessionInputDTO) (*CreateSess
 	passwordsMatch := user.ValidatePassword(input.Password)
 
 	if !passwordsMatch {
-		return nil, errors.New("unauthorized")
+		return nil, ErrUnauthorized
 	}
 
 	_, tokenString, _ := u.Jwt.Encode(map[string]interface{}{

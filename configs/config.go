@@ -1,5 +1,3 @@
-// TODO: QUANDO FOR COMMITAR ISSO AQUI, TIRAR O CAMINHO DO GITIGNORE
-
 package configs
 
 import (
@@ -7,16 +5,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfg *conf
+var cfg *Configs
 
-type conf struct {
+type Configs struct {
 	WebServerPort string `mapstructure:"WEBSERVER_PORT"`
 	JWTSecret     string `mapstructure:"JWT_SECRET"`
 	JWTExpiresIn  int    `mapstructure:"JWT_EXPIRES_IN"`
 	TokenAuth     *jwtauth.JWTAuth
 }
 
-func LoadConfig(path string) (*conf, error) {
+func LoadConfig(path string) (*Configs, error) {
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)

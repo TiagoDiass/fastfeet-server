@@ -1,13 +1,17 @@
 meta {
   name: GetDeliveredPackages
   type: http
-  seq: 3
+  seq: 2
 }
 
 get {
   url: http://localhost:8000/packages/delivered
   body: none
   auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTkzNjQ5NjEsInN1YiI6IjBhMzY5YWY3LTY1NzgtNDYzMC1iNThkLWFiOTNiYzc1Y2MyMiIsInVzZXIiOnsiaWQiOiIwYTM2OWFmNy02NTc4LTQ2MzAtYjU4ZC1hYjkzYmM3NWNjMjIiLCJkb2N1bWVudCI6IjE2NzM5MDAwMDM0IiwibmFtZSI6IlRpYWdvIEFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJwaG9uZSI6IjE5OTU2NzgxMjM0Iiwicm9sZSI6ImFkbWluIiwiY3JlYXRlZEF0IjoiMjAyNC0wNi0xNlQxNzoxODo0Ni43NTQ4NjgtMDM6MDAifX0.3t3NXxYwzlQYROvOl6WTwk7-C-ydDTsM-dYo8tskCzA
 }
 
 auth:basic {

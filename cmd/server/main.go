@@ -3,15 +3,18 @@ package main
 import (
 	"net/http"
 
+	"github.com/TiagoDiass/fastfeet-server/configs"
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 	"github.com/TiagoDiass/fastfeet-server/internal/infra/web"
 	"github.com/TiagoDiass/fastfeet-server/internal/repository"
 	repositoryimpl "github.com/TiagoDiass/fastfeet-server/internal/repository/repository_impl"
 	packageUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/package"
 	recipientUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/recipient"
+	sessionUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/session"
 	userUsecase "github.com/TiagoDiass/fastfeet-server/internal/usecase/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/jwtauth"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -23,6 +26,7 @@ type Repositories struct {
 }
 
 type Usecases struct {
+	CreateSessionUsecase           *sessionUsecase.CreateSessionUsecase
 	CreateUserUsecase              *userUsecase.CreateUserUsecase
 	CreateRecipientUsecase         *recipientUsecase.CreateRecipientUsecase
 	CreatePackageUsecase           *packageUsecase.CreatePackageUsecase
@@ -36,14 +40,15 @@ type Handlers struct {
 	RecipientHandler *web.RecipientHandler
 	UserHandler      *web.UserHandler
 	PackageHandler   *web.PackageHandler
+	SessionHandler   *web.SessionHandler
 }
 
 func main() {
-	// cfg, err := configs.LoadConfig(".")
+	cfg, err := configs.LoadConfig(".")
 
-	// if err != nil {
-	// 	panic(err)
-	// }
+	if err != nil {
+		panic(err)
+	}
 
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
@@ -54,13 +59,20 @@ func main() {
 	db.AutoMigrate(&entity.Recipient{}, &entity.User{}, &entity.Package{})
 
 	repositories := createRepositories(db)
-	usecases := createUsecases(repositories)
+	usecases := createUsecases(repositories, cfg)
 	handlers := createHandlers(usecases)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	initializeRoutes(router, handlers)
+	router.Post("/session", handlers.SessionHandler.CreateSession)
+
+	router.Route("/", func(r chi.Router) {
+		r.Use(jwtauth.Verifier(cfg.TokenAuth))
+		r.Use(jwtauth.Authenticator)
+
+		initializeRoutes(r, handlers)
+	})
 
 	http.ListenAndServe(":8000", router)
 }
@@ -77,7 +89,7 @@ func createRepositories(db *gorm.DB) *Repositories {
 	}
 }
 
-func createUsecases(repositories *Repositories) *Usecases {
+func createUsecases(repositories *Repositories, cfg *configs.Configs) *Usecases {
 	createUserUsecase := userUsecase.NewCreateUserUsecase(repositories.UserRepository)
 	createRecipientUsecase := recipientUsecase.NewCreateRecipientUsecase(repositories.RecipientRepository)
 	createPackageUsecase := packageUsecase.NewCreatePackageUsecase(
@@ -89,6 +101,7 @@ func createUsecases(repositories *Repositories) *Usecases {
 	listDeliveredPackagesUsecase := packageUsecase.NewListDeliveredPackagesUsecase(repositories.PackageRepository)
 	withdrawPackageUsecase := packageUsecase.NewWithdrawPackageUsecase(repositories.PackageRepository, repositories.UserRepository)
 	confirmDeliveredPackageUsecase := packageUsecase.NewConfirmDeliveredPackageUsecase(repositories.PackageRepository)
+	createSessionUsecase := sessionUsecase.NewCreateSessionUsecase(repositories.UserRepository, cfg.TokenAuth, cfg.JWTExpiresIn)
 
 	return &Usecases{
 		CreateUserUsecase:              createUserUsecase,
@@ -98,6 +111,7 @@ func createUsecases(repositories *Repositories) *Usecases {
 		ListDeliveredPackagesUsecase:   listDeliveredPackagesUsecase,
 		WithdrawPackageUsecase:         withdrawPackageUsecase,
 		ConfirmDeliveredPackageUsecase: confirmDeliveredPackageUsecase,
+		CreateSessionUsecase:           createSessionUsecase,
 	}
 }
 
@@ -111,15 +125,17 @@ func createHandlers(usecases *Usecases) *Handlers {
 		usecases.WithdrawPackageUsecase,
 		usecases.ConfirmDeliveredPackageUsecase,
 	)
+	sessionHandler := web.NewSessionHandler(usecases.CreateSessionUsecase)
 
 	return &Handlers{
 		RecipientHandler: recipientHandler,
 		UserHandler:      userHandler,
 		PackageHandler:   packageHandler,
+		SessionHandler:   sessionHandler,
 	}
 }
 
-func initializeRoutes(router *chi.Mux, handlers *Handlers) {
+func initializeRoutes(router chi.Router, handlers *Handlers) {
 	router.Post("/recipients", handlers.RecipientHandler.CreateRecipient)
 	router.Post("/users", handlers.UserHandler.CreateUser)
 	router.Post("/packages", handlers.PackageHandler.CreatePackage)
