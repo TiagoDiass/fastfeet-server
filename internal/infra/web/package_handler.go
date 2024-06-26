@@ -33,10 +33,17 @@ func NewPackageHandler(
 }
 
 func (h *PackageHandler) CreatePackage(w http.ResponseWriter, req *http.Request) {
-	// TODO: refactor later to get UserID on request headers or context, idk
+	claims, err := GetClaimsFromContext(req.Context())
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorResponse := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(errorResponse)
+		return
+	}
 
 	var input usecase.CreatePackageInputDTO
-	err := json.NewDecoder(req.Body).Decode(&input)
+	err = json.NewDecoder(req.Body).Decode(&input)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -45,6 +52,7 @@ func (h *PackageHandler) CreatePackage(w http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	input.UserID = claims.User.ID
 	output, err := h.CreatePackageUsecase.Execute(input)
 
 	if err != nil {
