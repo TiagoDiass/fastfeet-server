@@ -6,6 +6,7 @@
 
 - [x] Refactor main.go to be easier to read (separate stuff)
 - [x] Add authentication
+- [ ] Improve README with info about the project (add link to Figma)
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
 - [ ] Add tests to http handlers
   - [ ] User handlers
