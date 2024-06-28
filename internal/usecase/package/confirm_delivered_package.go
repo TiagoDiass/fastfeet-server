@@ -7,7 +7,7 @@ import (
 
 type ConfirmDeliveredPackageInputDTO struct {
 	PackageID           string
-	DeliverymanID       string `json:"deliveryman_id"`
+	DeliverymanID       string
 	DeliveredPictureURL string `json:"delivered_picture_url"`
 }
 

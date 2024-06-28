@@ -6,8 +6,8 @@ import (
 )
 
 type WithdrawPackageInputDTO struct {
-	PackageID     string `json:"package_id"`
-	DeliverymanID string `json:"deliveryman_id"`
+	PackageID     string
+	DeliverymanID string
 }
 
 type WithdrawPackageUsecase struct {

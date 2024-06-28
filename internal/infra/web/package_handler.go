@@ -107,6 +107,7 @@ func (h *PackageHandler) ListDeliveredPackages(w http.ResponseWriter, req *http.
 
 func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Request) {
 	var input usecase.WithdrawPackageInputDTO
+
 	packageId := chi.URLParam(req, "packageId")
 
 	if packageId == "" {
@@ -116,14 +117,16 @@ func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Reques
 
 	input.PackageID = packageId
 
-	err := json.NewDecoder(req.Body).Decode(&input)
+	claims, err := GetClaimsFromContext(req.Context())
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		error := Error{Message: err.Error()}
-		json.NewEncoder(w).Encode(error)
+		w.WriteHeader(http.StatusInternalServerError)
+		errorResponse := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(errorResponse)
 		return
 	}
+
+	input.DeliverymanID = claims.User.ID
 
 	output, err := h.WithdrawPackageUsecase.Execute(input)
 
@@ -149,6 +152,7 @@ func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Reques
 
 func (h *PackageHandler) ConfirmDeliveredPackage(w http.ResponseWriter, req *http.Request) {
 	var input usecase.ConfirmDeliveredPackageInputDTO
+
 	packageId := chi.URLParam(req, "packageId")
 
 	if packageId == "" {
@@ -156,9 +160,16 @@ func (h *PackageHandler) ConfirmDeliveredPackage(w http.ResponseWriter, req *htt
 		return
 	}
 
-	input.PackageID = packageId
+	claims, err := GetClaimsFromContext(req.Context())
 
-	err := json.NewDecoder(req.Body).Decode(&input)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorResponse := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(errorResponse)
+		return
+	}
+
+	err = json.NewDecoder(req.Body).Decode(&input)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -166,6 +177,9 @@ func (h *PackageHandler) ConfirmDeliveredPackage(w http.ResponseWriter, req *htt
 		json.NewEncoder(w).Encode(error)
 		return
 	}
+
+	input.PackageID = packageId
+	input.DeliverymanID = claims.User.ID
 
 	output, err := h.ConfirmDeliveredPackageUsecase.Execute(input)
 

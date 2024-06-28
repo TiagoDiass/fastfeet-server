@@ -5,9 +5,13 @@ meta {
 }
 
 patch {
-  url: http://localhost:8000/packages/confirm-delivery/9d6884ff-196e-4090-8927-602f95d5cba2
+  url: http://localhost:8000/packages/confirm-delivery/3f3757bd-c285-435c-bf47-3ac0b840509e
   body: json
   auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTk1NDYwNTMsInN1YiI6ImEyNjY3OWNlLTIzYTYtNDI1Ni05MDRhLTliNTEwMDc3OGUyYSIsInVzZXIiOnsiaWQiOiJhMjY2NzljZS0yM2E2LTQyNTYtOTA0YS05YjUxMDA3NzhlMmEiLCJkb2N1bWVudCI6IjQ4MDgwMzM0MDIxIiwibmFtZSI6Ikpvw6NvIGRhIEFtYXpvbiIsImVtYWlsIjoiam9hb3ppbmhvQGFtYXpvbi5jb20uYnIiLCJwaG9uZSI6IjE5Njc4OTQ1NjciLCJyb2xlIjoiZGVsaXZlcnltYW4iLCJjcmVhdGVkQXQiOiIyMDI0LTA2LTE2VDIyOjA1OjM3LjA4ODI2Ni0wMzowMCJ9fQ.5v4GyQFxWQdV-GiezfzF4FMYjFwa-qlYS-kJ1ye0I_M
 }
 
 auth:basic {
@@ -21,7 +25,6 @@ auth:bearer {
 
 body:json {
   {
-    "deliveryman_id": "a26679ce-23a6-4256-904a-9b5100778e2a",
     "delivered_picture_url": "https://fake-picture-url.com"
   }
 }
