@@ -62,7 +62,7 @@ You can check more details on how to setup Bruno here: <a href="./bruno-http-cli
 - [ ] Add tests to http handlers
   - [x] User handlers
   - [ ] Session handlers
-  - [ ] Recipient handlers
+  - [x] Recipient handlers
   - [ ] Package handlers
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
 - [ ] Add swagger to endpoints
