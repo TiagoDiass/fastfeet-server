@@ -38,3 +38,23 @@ func TestCreateRecipientSuccessCase(t *testing.T) {
 	require.Equal(t, output.State, input.State)
 	require.Equal(t, output.Zipcode, input.Zipcode)
 }
+
+func TestCreateRecipientWhenRepositoryReturnsAnError(t *testing.T) {
+	createRecipientUsecase := makeRecipientSut()
+
+	input := CreateRecipientInputDTO{
+		Name:        "John Doe",
+		Email:       test.EmailThatReturnsErrorOnCreateRecipient,
+		Street:      "Main St",
+		HouseNumber: "123",
+		District:    "Downtown",
+		State:       "CA",
+		Zipcode:     "12345",
+	}
+
+	output, err := createRecipientUsecase.Execute(input)
+
+	require.Nil(t, output)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, test.MockErrorOnCreateRecipient)
+}

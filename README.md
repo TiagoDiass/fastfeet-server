@@ -19,7 +19,7 @@ This is a RESTful API built with Go, Hexagonal Architecture, SQLite (which will 
 
 ### Fastfeet Applications
 
-The applications built for Fastfeet are: 
+The applications built for Fastfeet are:
 
 - An administration dashboard where admin users will be able to manage all the important stuff like: registering recipients, deliverymen and packages and also reseting deliverymen passwords.
 
@@ -50,7 +50,7 @@ $ cd fastfeet-server
 $ go mod download
 ```
 
-After cloning the repo and installing the dependencies, you can use Bruno to test the API. Bruno is an HTTP client that I used while developing this API, all HTTP requests are ready to use, you just need to download Bruno and import the collection. 
+After cloning the repo and installing the dependencies, you can use Bruno to test the API. Bruno is an HTTP client that I used while developing this API, all HTTP requests are ready to use, you just need to download Bruno and import the collection.
 
 You can check more details on how to setup Bruno here: <a href="./bruno-http-client">How to use Bruno to test this API.</a>
 
@@ -60,10 +60,13 @@ You can check more details on how to setup Bruno here: <a href="./bruno-http-cli
 - [x] Add authentication
 - [x] Improve README with info about the project (add link to Figma)
 - [ ] Add tests to http handlers
-  - [ ] User handlers
+  - [x] User handlers
+  - [ ] Session handlers
   - [ ] Recipient handlers
   - [ ] Package handlers
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
 - [ ] Add swagger to endpoints
 - [ ] Check how we can notify recipients about their packages through email
+- [ ] Create endpoint to upload files (will be used to upload the delivered packages confirmation picture)
+- [ ] Add endpoints payload validation
 - [ ] Add endpoints to finish cruds of other entities

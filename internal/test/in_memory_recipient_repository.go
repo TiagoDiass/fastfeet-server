@@ -7,7 +7,9 @@ import (
 )
 
 var (
-	ErrRecipientNotExists = errors.New("recipient does not exist")
+	ErrRecipientNotExists                  = errors.New("recipient does not exist")
+	MockErrorOnCreateRecipient             = errors.New("")
+	EmailThatReturnsErrorOnCreateRecipient = "error@example.com"
 )
 
 type InMemoryRecipientRepository struct {
@@ -20,8 +22,12 @@ func NewInMemoryRecipientRepository() *InMemoryRecipientRepository {
 	}
 }
 
-func (r *InMemoryRecipientRepository) Create(recipientId *entity.Recipient) error {
-	r.recipients[recipientId.ID] = recipientId
+func (r *InMemoryRecipientRepository) Create(recipient *entity.Recipient) error {
+	if recipient.Email == EmailThatReturnsErrorOnCreateRecipient {
+		return MockErrorOnCreateRecipient
+	}
+
+	r.recipients[recipient.ID] = recipient
 
 	return nil
 }
