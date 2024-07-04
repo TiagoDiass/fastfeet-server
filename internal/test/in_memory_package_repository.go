@@ -7,7 +7,9 @@ import (
 )
 
 var (
-	ErrPackageNotExists = errors.New("package does not exist")
+	ErrPackageNotExists                 = errors.New("package does not exist")
+	ErrOnCreatePackage                  = errors.New("mocked error while creating package")
+	NameThatReturnsErrorOnCreatePackage = "Error Package"
 )
 
 type InMemoryPackageRepository struct {
@@ -21,6 +23,10 @@ func NewInMemoryPackageRepository() *InMemoryPackageRepository {
 }
 
 func (r *InMemoryPackageRepository) Create(pkg *entity.Package) error {
+	if pkg.Name == NameThatReturnsErrorOnCreatePackage {
+		return ErrOnCreatePackage
+	}
+
 	r.packages = append(r.packages, pkg)
 	return nil
 }

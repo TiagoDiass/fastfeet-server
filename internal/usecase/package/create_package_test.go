@@ -61,7 +61,7 @@ func TestCreatePackageSuccessCase(t *testing.T) {
 	require.Nil(t, output.DeliverymanId)
 }
 
-func TestCreatePackageUnauthorizedCase(t *testing.T) {
+func TestCreatePackageWhenUserIsUnauthorized(t *testing.T) {
 	createPackageUsecase := makeCreatePackageSut()
 
 	input := CreatePackageInputDTO{
@@ -77,7 +77,7 @@ func TestCreatePackageUnauthorizedCase(t *testing.T) {
 	require.ErrorIs(t, err, ErrUserIsNotAdmin)
 }
 
-func TestCreatePackageRecipientNotFound(t *testing.T) {
+func TestCreatePackageWhenRecipientDoesNotExist(t *testing.T) {
 	createPackageUsecase := makeCreatePackageSut()
 
 	input := CreatePackageInputDTO{
@@ -91,4 +91,20 @@ func TestCreatePackageRecipientNotFound(t *testing.T) {
 	require.Nil(t, output)
 	require.NotNil(t, err)
 	require.ErrorIs(t, err, ErrRecipientNotExists)
+}
+
+func TestCreatePackageWhenRepositoryReturnsAnError(t *testing.T) {
+	createPackageUsecase := makeCreatePackageSut()
+
+	input := CreatePackageInputDTO{
+		UserID:      "admin-id",
+		RecipientID: "recipient-id",
+		Name:        test.NameThatReturnsErrorOnCreatePackage,
+	}
+
+	output, err := createPackageUsecase.Execute(input)
+
+	require.Nil(t, output)
+	require.NotNil(t, err)
+	require.ErrorIs(t, err, test.ErrOnCreatePackage)
 }
