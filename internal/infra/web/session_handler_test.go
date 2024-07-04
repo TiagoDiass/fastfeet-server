@@ -65,30 +65,30 @@ func TestSessionHandler_CreateSessionSuccessCase(t *testing.T) {
 	require.NotEmpty(t, output.AccessToken)
 }
 
-// func TestSessionHandler_CreateSessionWithInvalidJSON(t *testing.T) {
-// 	invalidJSON := []byte(`{
-// 		"document": "87847048027",
-// 		"password": "beautiful-password"
-// 	`) // Missing closing brace
+func TestSessionHandler_CreateSessionWithInvalidJSON(t *testing.T) {
+	invalidJSON := []byte(`{
+		"document": "87847048027",
+		"password": "beautiful-password"
+	`) // Missing closing brace
 
-// 	sessionHandler := makeSessionHandlerSut()
-// 	req := httptest.NewRequest(
-// 		"POST",
-// 		"/sessions",
-// 		bytes.NewReader(invalidJSON),
-// 	)
-// 	w := httptest.NewRecorder()
+	sessionHandler := makeSessionHandlerSut()
+	req := httptest.NewRequest(
+		"POST",
+		"/sessions",
+		bytes.NewReader(invalidJSON),
+	)
+	w := httptest.NewRecorder()
 
-// 	sessionHandler.CreateSession(w, req)
+	sessionHandler.CreateSession(w, req)
 
-// 	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.NotEmpty(t, errorResponse.Message)
-// }
+	require.Nil(t, err)
+	require.NotEmpty(t, errorResponse.Message)
+}
 
 // func TestSessionHandler_CreateSessionWhenUserNotExists(t *testing.T) {
 // 	input := usecase.CreateSessionInputDTO{
