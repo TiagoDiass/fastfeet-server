@@ -61,7 +61,7 @@ You can check more details on how to setup Bruno here: <a href="./bruno-http-cli
 - [x] Improve README with info about the project (add link to Figma)
 - [ ] Add tests to http handlers
   - [x] User handlers
-  - [ ] Session handlers
+  - [x] Session handlers
   - [x] Recipient handlers
   - [ ] Package handlers
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
