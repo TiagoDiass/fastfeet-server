@@ -50,5 +50,5 @@ func TestCreateUserUsecaseWhenRepositoryReturnsAnError(t *testing.T) {
 
 	require.Nil(t, output)
 	require.NotNil(t, err)
-	require.ErrorIs(t, err, test.MockErrorOnCreateUser)
+	require.ErrorIs(t, err, test.ErrOnCreateUser)
 }

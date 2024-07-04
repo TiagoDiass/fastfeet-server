@@ -9,7 +9,7 @@ import (
 var (
 	ErrUserNotExists                 = errors.New("user does not exist")
 	ErrDeliverymanNotExists          = errors.New("user does not exist")
-	MockErrorOnCreateUser            = errors.New("error while creating user")
+	ErrOnCreateUser                  = errors.New("mocked error while creating user")
 	DocumentThatReturnsErrorOnCreate = "52780765003"
 )
 
@@ -27,7 +27,7 @@ func NewInMemoryUserRepository() *InMemoryUserRepository {
 
 func (r *InMemoryUserRepository) Create(user *entity.User) error {
 	if user.Document == DocumentThatReturnsErrorOnCreate {
-		return MockErrorOnCreateUser
+		return ErrOnCreateUser
 	}
 
 	r.users[user.ID] = user

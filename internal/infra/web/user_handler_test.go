@@ -107,5 +107,5 @@ func TestUserHandler_CreateUserWhenUsecaseReturnsError(t *testing.T) {
 	err := json.NewDecoder(w.Body).Decode(&output)
 
 	require.Nil(t, err)
-	require.Equal(t, output.Message, test.MockErrorOnCreateUser.Error())
+	require.Equal(t, output.Message, test.ErrOnCreateUser.Error())
 }
