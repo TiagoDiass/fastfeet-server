@@ -56,5 +56,5 @@ func TestCreateRecipientWhenRepositoryReturnsAnError(t *testing.T) {
 
 	require.Nil(t, output)
 	require.NotNil(t, err)
-	require.ErrorIs(t, err, test.MockErrorOnCreateRecipient)
+	require.ErrorIs(t, err, test.ErrOnCreateRecipient)
 }

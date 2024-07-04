@@ -111,5 +111,5 @@ func TestRecipientHandler_CreateRecipientWhenUsecaseReturnsError(t *testing.T) {
 	err := json.NewDecoder(w.Body).Decode(&output)
 
 	require.Nil(t, err)
-	require.Equal(t, output.Message, test.MockErrorOnCreateRecipient.Error())
+	require.Equal(t, output.Message, test.ErrOnCreateRecipient.Error())
 }

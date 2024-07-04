@@ -8,7 +8,7 @@ import (
 
 var (
 	ErrRecipientNotExists                  = errors.New("recipient does not exist")
-	MockErrorOnCreateRecipient             = errors.New("")
+	ErrOnCreateRecipient                   = errors.New("mocked error while creating recipient")
 	EmailThatReturnsErrorOnCreateRecipient = "error@example.com"
 )
 
@@ -24,7 +24,7 @@ func NewInMemoryRecipientRepository() *InMemoryRecipientRepository {
 
 func (r *InMemoryRecipientRepository) Create(recipient *entity.Recipient) error {
 	if recipient.Email == EmailThatReturnsErrorOnCreateRecipient {
-		return MockErrorOnCreateRecipient
+		return ErrOnCreateRecipient
 	}
 
 	r.recipients[recipient.ID] = recipient
