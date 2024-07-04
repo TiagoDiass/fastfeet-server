@@ -116,28 +116,28 @@ func TestSessionHandler_CreateSessionWhenUserNotExists(t *testing.T) {
 	require.Equal(t, errorResponse.Message, "Unauthorized")
 }
 
-// func TestSessionHandler_CreateSessionWithWrongPassword(t *testing.T) {
-// 	input := usecase.CreateSessionInputDTO{
-// 		Document: "87847048027",
-// 		Password: "wrong-password",
-// 	}
-// 	inputJSON, _ := json.Marshal(input)
+func TestSessionHandler_CreateSessionWithWrongPassword(t *testing.T) {
+	input := usecase.CreateSessionInputDTO{
+		Document: "87847048027",
+		Password: "wrong-password",
+	}
+	inputJSON, _ := json.Marshal(input)
 
-// 	sessionHandler := makeSessionHandlerSut()
-// 	req := httptest.NewRequest(
-// 		"POST",
-// 		"/sessions",
-// 		bytes.NewReader(inputJSON),
-// 	)
-// 	w := httptest.NewRecorder()
+	sessionHandler := makeSessionHandlerSut()
+	req := httptest.NewRequest(
+		"POST",
+		"/sessions",
+		bytes.NewReader(inputJSON),
+	)
+	w := httptest.NewRecorder()
 
-// 	sessionHandler.CreateSession(w, req)
+	sessionHandler.CreateSession(w, req)
 
-// 	require.Equal(t, http.StatusUnauthorized, w.Code)
+	require.Equal(t, http.StatusUnauthorized, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, errorResponse.Message, "Unauthorized")
-// }
+	require.Nil(t, err)
+	require.Equal(t, errorResponse.Message, "Unauthorized")
+}

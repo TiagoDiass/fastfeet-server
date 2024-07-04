@@ -32,7 +32,7 @@ func (h *SessionHandler) CreateSession(w http.ResponseWriter, req *http.Request)
 
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		error := Error{Message: "Unathorized"}
+		error := Error{Message: "Unauthorized"}
 		json.NewEncoder(w).Encode(error)
 		return
 	}
