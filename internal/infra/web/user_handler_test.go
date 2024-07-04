@@ -82,7 +82,7 @@ func TestUserHandler_CreateUserWithInvalidJSON(t *testing.T) {
 
 func TestUserHandler_CreateUserWhenUsecaseReturnsError(t *testing.T) {
 	input := usecase.CreateUserInputDTO{
-		Document: test.DocumentThatReturnsErrorOnCreate,
+		Document: test.DocumentThatReturnsErrorOnCreateUser,
 		Password: "beautiful-password",
 		Name:     "John Doe",
 		Email:    "johndoe@gmail.com",

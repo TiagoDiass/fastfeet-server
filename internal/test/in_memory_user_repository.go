@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ErrUserNotExists                 = errors.New("user does not exist")
-	ErrDeliverymanNotExists          = errors.New("user does not exist")
-	ErrOnCreateUser                  = errors.New("mocked error while creating user")
-	DocumentThatReturnsErrorOnCreate = "52780765003"
+	ErrUserNotExists                     = errors.New("user does not exist")
+	ErrDeliverymanNotExists              = errors.New("user does not exist")
+	ErrOnCreateUser                      = errors.New("mocked error while creating user")
+	DocumentThatReturnsErrorOnCreateUser = "52780765003"
 )
 
 type InMemoryUserRepository struct {
@@ -26,7 +26,7 @@ func NewInMemoryUserRepository() *InMemoryUserRepository {
 }
 
 func (r *InMemoryUserRepository) Create(user *entity.User) error {
-	if user.Document == DocumentThatReturnsErrorOnCreate {
+	if user.Document == DocumentThatReturnsErrorOnCreateUser {
 		return ErrOnCreateUser
 	}
 

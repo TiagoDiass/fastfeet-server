@@ -38,7 +38,7 @@ func TestCreateUserUsecaseWhenRepositoryReturnsAnError(t *testing.T) {
 	createUserUsecase := NewCreateUserUsecase(userRepository)
 
 	input := CreateUserInputDTO{
-		Document: test.DocumentThatReturnsErrorOnCreate,
+		Document: test.DocumentThatReturnsErrorOnCreateUser,
 		Password: "beautiful-password",
 		Name:     "John Doe",
 		Email:    "johndoe@gmail.com",
