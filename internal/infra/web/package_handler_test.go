@@ -401,59 +401,59 @@ func TestPackageHandler_WithdrawWhenPackageIdIsMissingInURLParams(t *testing.T) 
 	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
-// func TestPackageHandler_WithdrawWhenPackageNotExists(t *testing.T) {
-// 	packageHandler := makePackageHandlerSut()
-// 	token := generateToken("deliveryman-id")
+func TestPackageHandler_WithdrawWhenPackageNotExists(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
+	token := generateToken("deliveryman-id")
 
-// 	req := httptest.NewRequest("PATCH", "/packages/withdraw/non-existent-package-id", nil)
+	req := httptest.NewRequest("PATCH", "/packages/withdraw/non-existent-package-id", nil)
 
-// 	rctx := chi.NewRouteContext()
-// 	rctx.URLParams.Add("packageId", "non-existent-package-id")
-// 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("packageId", "non-existent-package-id")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-// 	ctx := jwtauth.NewContext(req.Context(), token, nil)
-// 	req = req.WithContext(ctx)
-// 	w := httptest.NewRecorder()
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
+	w := httptest.NewRecorder()
 
-// 	packageHandler.WithdrawPackage(w, req)
+	packageHandler.WithdrawPackage(w, req)
 
-// 	require.Equal(t, http.StatusNotFound, w.Code)
+	require.Equal(t, http.StatusNotFound, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, usecase.ErrPackageNotExists.Error(), errorResponse.Message)
-// }
+	require.Nil(t, err)
+	require.Equal(t, usecase.ErrPackageNotExists.Error(), errorResponse.Message)
+}
 
-// func TestPackageHandler_WithdrawWhenDeliverymanNotExists(t *testing.T) {
-// 	packageHandler := makePackageHandlerSut()
+func TestPackageHandler_WithdrawWhenDeliverymanNotExists(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
 
-// 	pkg := entity.NewPackage("recipient-id", "Package 1")
-// 	pkg.ID = "package-id"
-// 	packageHandler.WithdrawPackageUsecase.PackageRepository.Create(pkg)
+	pkg := entity.NewPackage("recipient-id", "Package 1")
+	pkg.ID = "package-id"
+	packageHandler.WithdrawPackageUsecase.PackageRepository.Create(pkg)
 
-// 	token := generateToken("non-existent-deliveryman-id")
-// 	req := httptest.NewRequest("PATCH", "/packages/withdraw/package-id", nil)
+	token := generateToken("non-existent-deliveryman-id")
+	req := httptest.NewRequest("PATCH", "/packages/withdraw/package-id", nil)
 
-// 	rctx := chi.NewRouteContext()
-// 	rctx.URLParams.Add("packageId", "package-id")
-// 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("packageId", "package-id")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-// 	ctx := jwtauth.NewContext(req.Context(), token, nil)
-// 	req = req.WithContext(ctx)
-// 	w := httptest.NewRecorder()
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
+	w := httptest.NewRecorder()
 
-// 	packageHandler.WithdrawPackage(w, req)
+	packageHandler.WithdrawPackage(w, req)
 
-// 	require.Equal(t, http.StatusNotFound, w.Code)
+	require.Equal(t, http.StatusNotFound, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, usecase.ErrDeliverymanNotExists.Error(), errorResponse.Message)
-// }
+	require.Nil(t, err)
+	require.Equal(t, usecase.ErrDeliverymanNotExists.Error(), errorResponse.Message)
+}
 
 // func TestPackageHandler_WithdrawWhenPackageWasAlreadyWithdrew(t *testing.T) {
 // 	packageHandler := makePackageHandlerSut()
