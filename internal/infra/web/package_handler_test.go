@@ -154,37 +154,37 @@ func TestPackageHandler_CreatePackageWithInvalidJSON(t *testing.T) {
 	require.NotEmpty(t, errorResponse.Message)
 }
 
-// func TestPackageHandler_CreatePackageWhenUserIsNotAdmin(t *testing.T) {
-// 	input := usecase.CreatePackageInputDTO{
-// 		RecipientID: "recipient-id",
-// 		Name:        "Sample Package",
-// 	}
-// 	inputJSON, _ := json.Marshal(input)
+func TestPackageHandler_CreatePackageWhenUserIsNotAdmin(t *testing.T) {
+	input := usecase.CreatePackageInputDTO{
+		RecipientID: "recipient-id",
+		Name:        "Sample Package",
+	}
+	inputJSON, _ := json.Marshal(input)
 
-// 	packageHandler := makePackageHandlerSut()
-// 	token := generateToken("deliveryman-id")
+	packageHandler := makePackageHandlerSut()
+	token := generateToken("deliveryman-id")
 
-// 	// Create a context with the token
-// 	ctx := context.WithValue(context.Background(), jwtauth.TokenCtxKey, token)
+	req := httptest.NewRequest(
+		"POST",
+		"/packages",
+		bytes.NewReader(inputJSON),
+	)
 
-// 	req := httptest.NewRequest(
-// 		"POST",
-// 		"/packages",
-// 		bytes.NewReader(inputJSON),
-// 	)
-// 	req = req.WithContext(ctx)
-// 	w := httptest.NewRecorder()
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
 
-// 	packageHandler.CreatePackage(w, req)
+	w := httptest.NewRecorder()
 
-// 	require.Equal(t, http.StatusUnauthorized, w.Code)
+	packageHandler.CreatePackage(w, req)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	require.Equal(t, http.StatusUnauthorized, w.Code)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, errorResponse.Message, usecase.ErrUserIsNotAdmin.Error())
-// }
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+
+	require.Nil(t, err)
+	require.Equal(t, errorResponse.Message, usecase.ErrUserIsNotAdmin.Error())
+}
 
 // func TestPackageHandler_CreatePackageWhenRecipientDoesNotExist(t *testing.T) {
 // 	input := usecase.CreatePackageInputDTO{
