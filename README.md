@@ -48,6 +48,9 @@ $ cd fastfeet-server
 
 # Install the dependencies
 $ go mod download
+
+# Start the server
+# make server
 ```
 
 After cloning the repo and installing the dependencies, you can use Bruno to test the API. Bruno is an HTTP client that I used while developing this API, all HTTP requests are ready to use, you just need to download Bruno and import the collection.
