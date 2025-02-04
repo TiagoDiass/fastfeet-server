@@ -123,36 +123,36 @@ func TestPackageHandler_CreatePackageSuccessCase(t *testing.T) {
 	require.Equal(t, input.Name, output.Name)
 }
 
-// func TestPackageHandler_CreatePackageWithInvalidJSON(t *testing.T) {
-// 	invalidJSON := []byte(`{
-// 		"recipient_id": "recipient-id",
-// 		"name": "Sample Package"
-// 	`) // Missing closing brace
+func TestPackageHandler_CreatePackageWithInvalidJSON(t *testing.T) {
+	invalidJSON := []byte(`{
+		"recipient_id": "recipient-id",
+		"name": "Sample Package"
+	`) // Missing closing brace
 
-// 	packageHandler := makePackageHandlerSut()
-// 	token := generateToken("admin-id")
+	packageHandler := makePackageHandlerSut()
+	token := generateToken("admin-id")
 
-// 	// Create a context with the token
-// 	ctx := context.WithValue(context.Background(), jwtauth.TokenCtxKey, token)
+	req := httptest.NewRequest(
+		"POST",
+		"/packages",
+		bytes.NewReader(invalidJSON),
+	)
 
-// 	req := httptest.NewRequest(
-// 		"POST",
-// 		"/packages",
-// 		bytes.NewReader(invalidJSON),
-// 	)
-// 	req = req.WithContext(ctx)
-// 	w := httptest.NewRecorder()
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
 
-// 	packageHandler.CreatePackage(w, req)
+	w := httptest.NewRecorder()
 
-// 	require.Equal(t, http.StatusBadRequest, w.Code)
+	packageHandler.CreatePackage(w, req)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 
-// 	require.Nil(t, err)
-// 	require.NotEmpty(t, errorResponse.Message)
-// }
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+
+	require.Nil(t, err)
+	require.NotEmpty(t, errorResponse.Message)
+}
 
 // func TestPackageHandler_CreatePackageWhenUserIsNotAdmin(t *testing.T) {
 // 	input := usecase.CreatePackageInputDTO{
