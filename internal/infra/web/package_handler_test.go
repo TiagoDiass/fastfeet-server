@@ -485,31 +485,31 @@ func TestPackageHandler_WithdrawWhenPackageWasAlreadyWithdrew(t *testing.T) {
 	require.Equal(t, usecase.ErrPackageWasAlreadyWithdrew.Error(), errorResponse.Message)
 }
 
-// func TestPackageHandler_WithdrawWhenRepositoryReturnsAnError(t *testing.T) {
-// 	packageHandler := makePackageHandlerSut()
+func TestPackageHandler_WithdrawWhenRepositoryReturnsAnError(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
 
-// 	pkg := entity.NewPackage("recipient-id", test.NameThatReturnsErrorOnUpdatePackage)
-// 	pkg.ID = "package-id"
-// 	packageHandler.WithdrawPackageUsecase.PackageRepository.Create(pkg)
+	pkg := entity.NewPackage("recipient-id", test.NameThatReturnsErrorOnUpdatePackage)
+	pkg.ID = "package-id"
+	packageHandler.WithdrawPackageUsecase.PackageRepository.Create(pkg)
 
-// 	token := generateToken("deliveryman-id")
-// 	req := httptest.NewRequest("PATCH", "/packages/withdraw/package-id", nil)
+	token := generateToken("deliveryman-id")
+	req := httptest.NewRequest("PATCH", "/packages/withdraw/package-id", nil)
 
-// 	rctx := chi.NewRouteContext()
-// 	rctx.URLParams.Add("packageId", "package-id")
-// 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("packageId", "package-id")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-// 	ctx := jwtauth.NewContext(req.Context(), token, nil)
-// 	req = req.WithContext(ctx)
-// 	w := httptest.NewRecorder()
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
+	w := httptest.NewRecorder()
 
-// 	packageHandler.WithdrawPackage(w, req)
+	packageHandler.WithdrawPackage(w, req)
 
-// 	require.Equal(t, http.StatusInternalServerError, w.Code)
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, test.ErrOnUpdatePackage.Error(), errorResponse.Message)
-// }
+	require.Nil(t, err)
+	require.Equal(t, test.ErrOnUpdatePackage.Error(), errorResponse.Message)
+}
