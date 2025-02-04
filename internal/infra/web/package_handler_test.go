@@ -218,34 +218,34 @@ func TestPackageHandler_CreatePackageWhenRecipientDoesNotExist(t *testing.T) {
 	require.Equal(t, errorResponse.Message, usecase.ErrRecipientNotExists.Error())
 }
 
-// func TestPackageHandler_CreatePackageWhenRepositoryReturnsAnError(t *testing.T) {
-// 	input := usecase.CreatePackageInputDTO{
-// 		RecipientID: "recipient-id",
-// 		Name:        test.NameThatReturnsErrorOnCreatePackage,
-// 	}
-// 	inputJSON, _ := json.Marshal(input)
+func TestPackageHandler_CreatePackageWhenRepositoryReturnsAnError(t *testing.T) {
+	input := usecase.CreatePackageInputDTO{
+		RecipientID: "recipient-id",
+		Name:        test.NameThatReturnsErrorOnCreatePackage,
+	}
+	inputJSON, _ := json.Marshal(input)
 
-// 	packageHandler := makePackageHandlerSut()
-// 	token := generateToken("admin-id")
+	packageHandler := makePackageHandlerSut()
+	token := generateToken("admin-id")
 
-// 	req := httptest.NewRequest(
-// 		"POST",
-// 		"/packages",
-// 		bytes.NewReader(inputJSON),
-// 	)
+	req := httptest.NewRequest(
+		"POST",
+		"/packages",
+		bytes.NewReader(inputJSON),
+	)
 
-// 	ctx := jwtauth.NewContext(req.Context(), token, nil)
-// 	req = req.WithContext(ctx)
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
 
-// 	w := httptest.NewRecorder()
+	w := httptest.NewRecorder()
 
-// 	packageHandler.CreatePackage(w, req)
+	packageHandler.CreatePackage(w, req)
 
-// 	require.Equal(t, http.StatusInternalServerError, w.Code)
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 
-// 	var errorResponse Error
-// 	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
 
-// 	require.Nil(t, err)
-// 	require.Equal(t, errorResponse.Message, test.ErrOnCreatePackage.Error())
-// }
+	require.Nil(t, err)
+	require.Equal(t, errorResponse.Message, test.ErrOnCreatePackage.Error())
+}
