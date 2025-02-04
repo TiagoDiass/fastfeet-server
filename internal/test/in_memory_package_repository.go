@@ -12,6 +12,8 @@ var (
 	NameThatReturnsErrorOnCreatePackage = "Package that returns error on create"
 	NameThatReturnsErrorOnFindPackages  = "Package that returns error on find"
 	ErrOnFindPackages                   = errors.New("mocked error while finding packages")
+	NameThatReturnsErrorOnUpdatePackage = "Package that returns error on update"
+	ErrOnUpdatePackage                  = errors.New("mocked error while updating package")
 )
 
 type InMemoryPackageRepository struct {
@@ -34,6 +36,10 @@ func (r *InMemoryPackageRepository) Create(pkg *entity.Package) error {
 }
 
 func (r *InMemoryPackageRepository) Update(pkg *entity.Package) error {
+	if pkg.Name == NameThatReturnsErrorOnUpdatePackage {
+		return ErrOnUpdatePackage
+	}
+
 	pkgIdx := -1
 
 	for idx, pkgAtIdx := range r.packages {

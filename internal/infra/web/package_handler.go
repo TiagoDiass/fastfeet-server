@@ -112,6 +112,8 @@ func (h *PackageHandler) WithdrawPackage(w http.ResponseWriter, req *http.Reques
 
 	if packageId == "" {
 		w.WriteHeader(http.StatusBadRequest)
+		errorResponse := Error{Message: "packageId is required"}
+		json.NewEncoder(w).Encode(errorResponse)
 		return
 	}
 

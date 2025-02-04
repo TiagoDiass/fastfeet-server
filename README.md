@@ -64,6 +64,7 @@ You can check more details on how to setup Bruno here: <a href="./bruno-http-cli
   - [x] Session handlers
   - [x] Recipient handlers
   - [ ] Package handlers
+- [ ] Check if there is a way to refactor the package handler in order to make its tests easier to read, the current test file is too long
 - [ ] Refactor ListPackagesUsecase to be able to list packages by status, this way we can use the same usecase to list available, delivered and canceled packages
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
 - [ ] Add swagger to endpoints
