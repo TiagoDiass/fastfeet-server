@@ -294,3 +294,58 @@ func TestPackageHandler_ListAvailablePackagesWhenRepositoryReturnsAnError(t *tes
 	require.Nil(t, err)
 	require.Equal(t, test.ErrOnFindPackages.Error(), errorResponse.Message)
 }
+
+func TestPackageHandler_ListDeliveredPackagesSuccessCase(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
+
+	pkg1 := entity.NewPackage("recipient-id", "Package 1")
+	pkg1.Withdraw("deliveryman-id")
+	pkg1.MarkAsDelivered("fake-picture-url-1")
+
+	pkg2 := entity.NewPackage("recipient-id", "Package 2")
+	pkg2.Withdraw("deliveryman-id")
+	pkg2.MarkAsDelivered("fake-picture-url-2")
+
+	packageHandler.ListDeliveredPackagesUsecase.PackageRepository.Create(pkg1)
+	packageHandler.ListDeliveredPackagesUsecase.PackageRepository.Create(pkg2)
+
+	req := httptest.NewRequest("GET", "/packages/delivered", nil)
+	w := httptest.NewRecorder()
+
+	packageHandler.ListDeliveredPackages(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var output []*entity.Package
+	err := json.NewDecoder(w.Body).Decode(&output)
+
+	require.Nil(t, err)
+	require.Len(t, output, 2)
+	require.Equal(t, "Package 1", output[0].Name)
+	require.Equal(t, "DELIVERED", output[0].Status)
+	require.Equal(t, "Package 2", output[1].Name)
+	require.Equal(t, "DELIVERED", output[1].Status)
+}
+
+func TestPackageHandler_ListDeliveredPackagesWhenRepositoryReturnsAnError(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
+
+	pkg := entity.NewPackage("recipient-id", test.NameThatReturnsErrorOnFindPackages)
+	pkg.Withdraw("deliveryman-id")
+	pkg.MarkAsDelivered("fake-picture-url")
+
+	packageHandler.ListDeliveredPackagesUsecase.PackageRepository.Create(pkg)
+
+	req := httptest.NewRequest("GET", "/packages/delivered", nil)
+	w := httptest.NewRecorder()
+
+	packageHandler.ListDeliveredPackages(w, req)
+
+	require.Equal(t, http.StatusInternalServerError, w.Code)
+
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+
+	require.Nil(t, err)
+	require.Equal(t, test.ErrOnFindPackages.Error(), errorResponse.Message)
+}

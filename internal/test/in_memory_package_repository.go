@@ -2,7 +2,6 @@ package test
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 )
@@ -60,12 +59,6 @@ func (r *InMemoryPackageRepository) FindAllByStatus(status string) ([]*entity.Pa
 			packages = append(packages, pkg)
 		}
 	}
-
-	fmt.Println("#### here's the repo packages ####")
-	fmt.Println(r.packages)
-
-	fmt.Println("#### here's the packages ####")
-	fmt.Println(packages)
 
 	if len(packages) > 0 && packages[0].Name == NameThatReturnsErrorOnFindPackages {
 		return nil, ErrOnFindPackages
