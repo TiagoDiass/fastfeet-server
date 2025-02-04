@@ -64,6 +64,7 @@ You can check more details on how to setup Bruno here: <a href="./bruno-http-cli
   - [x] Session handlers
   - [x] Recipient handlers
   - [ ] Package handlers
+- [ ] Refactor ListPackagesUsecase to be able to list packages by status, this way we can use the same usecase to list available, delivered and canceled packages
 - [ ] Add Github actions pipeline to run tests on every commit or pull request
 - [ ] Add swagger to endpoints
 - [ ] Check how we can notify recipients about their packages through email

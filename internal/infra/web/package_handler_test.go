@@ -274,3 +274,23 @@ func TestPackageHandler_ListAvailablePackagesSuccessCase(t *testing.T) {
 	require.Equal(t, "Package 1", output[0].Name)
 	require.Equal(t, "Package 2", output[1].Name)
 }
+
+func TestPackageHandler_ListAvailablePackagesWhenRepositoryReturnsAnError(t *testing.T) {
+	packageHandler := makePackageHandlerSut()
+
+	pkg := entity.NewPackage("recipient-id", test.NameThatReturnsErrorOnFindPackages)
+	packageHandler.ListAvailablePackagesUsecase.PackageRepository.Create(pkg)
+
+	req := httptest.NewRequest("GET", "/packages/available", nil)
+	w := httptest.NewRecorder()
+
+	packageHandler.ListAvailablePackages(w, req)
+
+	require.Equal(t, http.StatusInternalServerError, w.Code)
+
+	var errorResponse Error
+	err := json.NewDecoder(w.Body).Decode(&errorResponse)
+
+	require.Nil(t, err)
+	require.Equal(t, test.ErrOnFindPackages.Error(), errorResponse.Message)
+}

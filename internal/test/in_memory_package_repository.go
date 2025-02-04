@@ -2,6 +2,7 @@ package test
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/TiagoDiass/fastfeet-server/internal/entity"
 )
@@ -9,7 +10,9 @@ import (
 var (
 	ErrPackageNotExists                 = errors.New("package does not exist")
 	ErrOnCreatePackage                  = errors.New("mocked error while creating package")
-	NameThatReturnsErrorOnCreatePackage = "Error Package"
+	NameThatReturnsErrorOnCreatePackage = "Package that returns error on create"
+	NameThatReturnsErrorOnFindPackages  = "Package that returns error on find"
+	ErrOnFindPackages                   = errors.New("mocked error while finding packages")
 )
 
 type InMemoryPackageRepository struct {
@@ -51,13 +54,24 @@ func (r *InMemoryPackageRepository) Update(pkg *entity.Package) error {
 }
 
 func (r *InMemoryPackageRepository) FindAllByStatus(status string) ([]*entity.Package, error) {
-	availablePackages := []*entity.Package{}
+	packages := []*entity.Package{}
 	for _, pkg := range r.packages {
 		if pkg.Status == status {
-			availablePackages = append(availablePackages, pkg)
+			packages = append(packages, pkg)
 		}
 	}
-	return availablePackages, nil
+
+	fmt.Println("#### here's the repo packages ####")
+	fmt.Println(r.packages)
+
+	fmt.Println("#### here's the packages ####")
+	fmt.Println(packages)
+
+	if len(packages) > 0 && packages[0].Name == NameThatReturnsErrorOnFindPackages {
+		return nil, ErrOnFindPackages
+	}
+
+	return packages, nil
 }
 
 func (r *InMemoryPackageRepository) FindById(pkgId string) (*entity.Package, error) {
