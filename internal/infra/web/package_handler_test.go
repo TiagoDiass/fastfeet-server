@@ -550,3 +550,11 @@ func TestPackageHandler_ConfirmDeliveredPackageSuccessCase(t *testing.T) {
 	require.NotNil(t, output.DeliveredAt)
 	require.Equal(t, "fake-picture-url", *output.DeliveredPicture)
 }
+
+// TODO: Test next cases:
+// - Confirm delivered package when packageId is missing in URL params
+// - Confirm delivered package with invalid JSON
+// - Confirm delivered package when package not exists
+// - Confirm delivered package when package cannot be delivered (because it's not on going)
+// - Confirm delivered package when deliveryman is different from the one who withdrew the package
+// - Confirm delivered package when repository returns an error
