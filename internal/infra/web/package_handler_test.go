@@ -513,3 +513,40 @@ func TestPackageHandler_WithdrawWhenRepositoryReturnsAnError(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, test.ErrOnUpdatePackage.Error(), errorResponse.Message)
 }
+
+func TestPackageHandler_ConfirmDeliveredPackageSuccessCase(t *testing.T) {
+	input := usecase.ConfirmDeliveredPackageInputDTO{
+		DeliveredPictureURL: "fake-picture-url",
+	}
+	inputJSON, _ := json.Marshal(input)
+
+	packageHandler := makePackageHandlerSut()
+
+	pkg := entity.NewPackage("recipient-id", "Package 1")
+	pkg.ID = "package-id"
+	pkg.Withdraw("deliveryman-id")
+	packageHandler.ConfirmDeliveredPackageUsecase.PackageRepository.Create(pkg)
+
+	token := generateToken("deliveryman-id")
+	req := httptest.NewRequest("PATCH", "/packages/confirm-delivery/package-id", bytes.NewReader(inputJSON))
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("packageId", "package-id")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
+
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+	req = req.WithContext(ctx)
+	w := httptest.NewRecorder()
+
+	packageHandler.ConfirmDeliveredPackage(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var output entity.Package
+	err := json.NewDecoder(w.Body).Decode(&output)
+
+	require.Nil(t, err)
+	require.Equal(t, "DELIVERED", output.Status)
+	require.NotNil(t, output.DeliveredAt)
+	require.Equal(t, "fake-picture-url", *output.DeliveredPicture)
+}
